@@ -21,7 +21,7 @@ app.on('ready', () => {
   mainWindow = new BrowserWindow({
     show: false,
     width: 800,
-    height: 600,
+    height: 800,
     'web-preferences': {'plugins': true}
   });
 

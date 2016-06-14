@@ -1,0 +1,24 @@
+.header {
+  /* position: absolute; */
+  top: 30%;
+  left: 10px;
+  width: 200px;
+  text-align: left;
+  /* background-color: #36648b; */
+  padding-left: 10px;
+  display: inline-block;
+  /* box-sizing: border-box; */
+}
+
+.row {
+    font-size: 1.2em;
+    padding-right: 3em;
+}
+
+.name {
+    font-size: 2rem;
+}
+
+.title {
+    font-size: 2rem;
+}
