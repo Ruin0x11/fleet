@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Hello Electron React!</title>
+    <link rel="stylesheet" href="../node_modules/font-awesome/css/font-awesome.min.css" />
+    <script>
+     (function() {
+         if (!process.env.HOT) {
+             const link = document.createElement('link');
+             link.rel = 'stylesheet';
+             link.href = '../dist/style.css';
+             document.write(link.outerHTML);
+         }
+     }());
+    </script>
+    <script>window.$ = window.jQuery = require('./scripts/jquery-3.0.0.js');</script>
+
+  <style>
+  html {
+    box-sizing: border-box;
+  }
+  *, *:before, *:after {
+    box-sizing: inherit;
+  }
+  body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    font-family: 'Helvetica Neue', 'Avenir Next', Verdana, sans-serif;
+  }
+  </style>
+  </head>
+  <body>
+    <div class="indicator"></div>
+    <div style="width:800; height:600">
+      <webview id="root" style="width:800; height:480px" preload="./inject.js" src="http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/" plugins></webview>
+    </div>
+    <script>
+     onload = () => {
+         var ipc = require("ipc");
+         const webview = document.getElementById('root');
+         webview.addEventListener('console-message', function(e) {
+             console.log('Guest page logged a message:', e.message);
+         });
+
+         webview.addEventListener("ipc-message", function (e) {
+            console.log(e);
+            webview.loadURL(e.args[0]);
+            webview.openDevTools();
+         });
+
+         const indicator = document.querySelector('.indicator');
+
+         const loadstart = () => {
+             indicator.innerText = 'loading...';
+         };
+         var did = false;
+
+         const loadstop = () => {
+             indicator.innerText = '';
+            webview.insertCSS("#sectionWrap{ visibility:hidden; }")
+            webview.insertCSS("#spacing_top{ display:none; }")
+            webview.insertCSS("#flashWrap{ overflow:hidden; margin:0; }")
+            webview.insertCSS("body{ overflow:hidden; margin:0; }")
+             if (!did && webview.getTitle().indexOf("艦隊これくしょん -艦これ- - オンラインゲーム - DMM.com") > -1) {
+                 did = true;
+                 console.log('asd')
+                webview.send('ping');
+             }
+         };
+
+         webview.addEventListener('did-start-loading', loadstart);
+         webview.addEventListener('did-stop-loading', loadstop);
+     };
+    </script>
+
+  </body>
+</html>
