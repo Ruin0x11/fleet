@@ -1,24 +1,58 @@
 .header {
-  /* position: absolute; */
-  top: 30%;
-  left: 10px;
-  width: 200px;
+  width: 100%;
   text-align: left;
-  /* background-color: #36648b; */
+  background-color: #8D99AE;
   padding-left: 10px;
-  display: inline-block;
+  padding-top: 4px;
+  /* display: inline-block; */
   /* box-sizing: border-box; */
-}
-
-.row {
-    font-size: 1.2em;
-    padding-right: 3em;
+  /* vertical-align: middle; */
+  position: absolute;
+  font-size: 11px;
 }
 
 .name {
-    font-size: 2rem;
+  font-size: 2rem;
 }
 
-.title {
-    font-size: 2rem;
+/* .title {
+ */
+/*     font-size: 2rem; */
+/* } */
+
+.row{
+  width:100%;
+  /* border:4px solid #000; */
+  display:inline-block;
+  height: 32px;
+  bottom: 0;
+}
+
+.pic{
+  width:25%;
+  /* border:1px solid #00f; */
+  display:inline-block;
+}
+.title{
+  width:34%;
+  /* border:1px solid #f00; */
+  display:inline-block;
+}
+.desc{
+  width:18%;
+  /* border:1px solid #0ff; */
+  display:inline-block;
+}
+.id{
+  width:18%;
+  /* border:1px solid #f0f; */
+  display:inline-block;
+}
+.miscinfo {
+  font-size: 15px;
+  color: #DDE2E4;
+}
+
+.phrase {
+  font-size: 11px;
 }

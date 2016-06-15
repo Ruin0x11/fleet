@@ -7,6 +7,7 @@ export default class FleetFooter extends Component {
   render() {
     return (
         <div className={styles.container}>
+            <div className="indicator"></div>
         </div>
     );
   }

@@ -1,0 +1,10 @@
+.container {
+  height: 40px;
+  width: 100%;
+  bottom: 0;
+  position: absolute;
+}
+
+.indicator {
+  height: inherit;
+}

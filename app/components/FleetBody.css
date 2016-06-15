@@ -1,0 +1,21 @@
+.container {
+  position: relative;
+  top: 64px;
+  height: 200px;
+  display: flex;
+  padding-top: 4px;
+  /* left: 10px; */
+  /* text-align: center; */
+  /* background-color: grey; */
+}
+
+.sidearea {
+  width: 15%;
+  height: inherit;
+}
+
+.mainarea {
+  flex-grow: 1;
+  height: inherit;
+  background: #2B2D42;
+}

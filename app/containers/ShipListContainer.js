@@ -1,26 +1,16 @@
-import React, { Component } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import Home from '../components/Home';
 import ShipList from '../components/ShipList';
 
 
-export default class ShipListContainer extends Component {
-  constructor() {
-    super();
-    this.state = { ships: [] }
-  }
+function mapStateToProps (state) {
+    return {
+        ships: state.port_data
+    };
+}
 
-  componentDidMount() {
-      this.setState({ships: [{name: "赤城", health: 50}]});
-    // $.ajax({
-    //   url: "/my-comments.json",
-    //   dataType: 'json',
-    //   success: function(comments) {
-    //     this.setState({comments: comments});
-    //   }.bind(this)
-    // });
-  }
-
-  render() {
+render() {
     return <ShipList ships={this.state.ships} />;
-  }
+}
 }

@@ -24,6 +24,8 @@ const enhancer = compose(
   )
 );
 
+import { port_update } from '../actions/port';
+
 export default function configureStore(initialState) {
   const store = createStore(rootReducer, initialState, enhancer);
 
@@ -32,6 +34,9 @@ export default function configureStore(initialState) {
       store.replaceReducer(require('../reducers')) // eslint-disable-line global-require
     );
   }
+
+  var parsedJSON = require('../api_port.json');
+    store.dispatch(port_update(parsedJSON));
 
   return store;
 }

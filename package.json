@@ -104,6 +104,8 @@
     "electron-debug": "^1.0.0",
     "font-awesome": "^4.6.3",
     "postcss": "^5.0.21",
+    "proxy-agent": "^2.0.0",
+    "rc-progress": "^1.0.4",
     "react": "^15.1.0",
     "react-dom": "^15.1.0",
     "react-redux": "^4.4.5",
@@ -111,6 +113,8 @@
     "react-router-redux": "^4.0.4",
     "redux": "^3.5.2",
     "redux-thunk": "^2.1.0",
+    "routes": "^2.1.0",
+    "ruta3": "^2.0.0",
     "source-map-support": "^0.4.0"
   },
   "devEngines": {

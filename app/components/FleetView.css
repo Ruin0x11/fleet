@@ -1,8 +1,9 @@
 .container {
   /* position: absolute; */
   top: 30%;
+  height: 400px;
   left: 10px;
-  text-align: center;
+  /* text-align: center; */
   /* background-color: grey; */
 }
 

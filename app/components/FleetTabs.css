@@ -1,0 +1,29 @@
+.container {
+  position: absolute;
+  width: inherit;
+  height: inherit;
+  text-align: center;
+  /* background-color: grey; */
+}
+
+.container h2 {
+  font-size: 5rem;
+}
+
+.container a {
+  font-size: 1.4rem;
+}
+
+.tab {
+  position: relative;
+  height: 25%;
+  border-top:1px solid #444;
+  background: #EF233C;
+}
+
+.tab p {
+  font-size:14px;
+  vertical-align:middle;
+  text-align: center;
+  line-height: 25px;
+}
