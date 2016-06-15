@@ -22,6 +22,7 @@
 
 .row{
   width:100%;
+  height: inherit;
   /* border:4px solid #000; */
   display:inline-block;
   height: 32px;
@@ -30,21 +31,25 @@
 
 .pic{
   width:25%;
+  height: inherit;
   /* border:1px solid #00f; */
   display:inline-block;
 }
 .title{
   width:34%;
+  height: inherit;
   /* border:1px solid #f00; */
   display:inline-block;
 }
 .desc{
   width:18%;
+  height: inherit;
   /* border:1px solid #0ff; */
   display:inline-block;
 }
 .id{
   width:18%;
+  height: inherit;
   /* border:1px solid #f0f; */
   display:inline-block;
 }

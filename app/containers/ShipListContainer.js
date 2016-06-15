@@ -1,16 +1,23 @@
+import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Home from '../components/Home';
 import ShipList from '../components/ShipList';
-
+import { getDeckList } from '../selectors/port';
 
 function mapStateToProps (state) {
     return {
-        ships: state.port_data
+        decks: getDeckList(state),
+        currentDeck: 0
     };
 }
 
-render() {
-    return <ShipList ships={this.state.ships} />;
-}
-}
+const ShipListContainer = React.createClass({
+    render() {
+        console.log(this.props)
+        return <ShipList currentDeck={1} {...this.props} />;
+    }
+});
+
+export default connect(mapStateToProps)(ShipListContainer);
+

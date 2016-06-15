@@ -1,27 +1,25 @@
 import React, { PropTypes, Component } from 'react';
 import { Link } from 'react-router';
 import styles from './ShipList.css';
+import { shipPropTypes } from './ShipList';
+import HealthBar from './HealthBar';
 
 export default class Ship extends Component {
     static propTypes = {
-        api_id: PropTypes.number.isRequired,
-        api_lv: PropTypes.number.isRequired,
-        api_exp: PropTypes.array.isRequired,
-        api_nowhp: PropTypes.number.isRequired,
-        api_maxhp: PropTypes.number.isRequired,
-        api_fuel: PropTypes.number.isRequired,
-        api_bull: PropTypes.number.isRequired,
-        api_cond: PropTypes.number.isRequired,
+        ...shipPropTypes
     }
 
     constructor(props) {
         super(props);
     }
 
-    render({api_id, api_lv, api_exp, api_nowhp, api_maxhp, api_cond}) {
-        return <li>
-            <div><span className={styles.ship}>{api_id}</span> {api_lv} {api_exp[0]}/{api_exp[1]} <HealthBar percent={(api_nowhp/api_maxhp) * 100}/> {api_cond}</div>
-            </li>;
+    render() {
+        return <tr>
+            <td><span className={styles.ship}>{this.props.id}</span></td>
+            <td>{this.props.level}</td>
+            <td>{this.props.nowExp}/{this.props.nextExp}</td>
+            <td><HealthBar percent={(this.props.nowHp/this.props.maxHp) * 100}/> {this.props.cond}</td>
+            </tr>;
     }
 
 }
