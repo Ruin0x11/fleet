@@ -10,19 +10,20 @@ var ruta3 = require('ruta3');
 var router = ruta3();
 
 var fs = require('fs');
+var fi = 0;
 
 function getArticles () { console.log("Articles! Yes!") }
 function dood () { console.log("Dood! Yes!") }
 
 function writeResponse(url, response) {
     var filename = "./".concat(url.replace(/\//g, '_').concat(".json"));
-    fs.writeFile(filename, response, function(err) {
-        if(err) {
-            return console.log(err);
-        }
 
-        console.log("Saved ".concat(filename));
-    });
+    var wstream = fs.createWriteStream(filename);
+    // creates random Buffer of 100 bytes
+    wstream.write(response);
+    // create another Buffer of 100 bytes and write
+    wstream.end();
+    console.log("Saved ".concat(filename));
 }
 
 router.addRoute('/', writeResponse);
@@ -69,7 +70,7 @@ function httpUserRequest( userRequest, userResponse ) {
         'method': userRequest.method,
         'path': path,
         // 'agent': userRequest.agent,
-        'agent': new ProxyAgent("http://52.53.239.10:8083"),
+        'agent': new ProxyAgent("http://108.61.183.228:3128"),
         'auth': userRequest.auth,
         'headers': userRequest.headers
     };
@@ -96,13 +97,19 @@ function httpUserRequest( userRequest, userResponse ) {
                 proxyResponse.headers
             );
 
+            console.log(proxyResponse.statusCode)
+            console.log(proxyResponse.headers)
+
+            var buf = Buffer.alloc(0);
+
             proxyResponse.on(
                 'data',
                 function (chunk) {
                     if ( debugging ) {
                         console.log( '  < chunk = %d bytes', chunk.length );
                     }
-                    responseStr += chunk;
+
+                    buf = Buffer.concat([buf, chunk]);
                     userResponse.write( chunk );
                 }
             );
@@ -118,7 +125,7 @@ function httpUserRequest( userRequest, userResponse ) {
                     console.log(path);
                     var args = router.match(path);
                     if(args) {
-                        args.action(path, responseStr)
+                        args.action(path, buf)
                     }
                 }
             );
