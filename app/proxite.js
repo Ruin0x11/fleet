@@ -1,33 +1,46 @@
 var http = require('http');
 var net = require('net');
 var ProxyAgent = require('proxy-agent');
+var zlib = require('zlib');
 
-var debugging = 0;
+var debugging = 1;
 
 var regex_hostport = /^([^:]+)(:([0-9]+))?$/;
 
 var ruta3 = require('ruta3');
-var router = ruta3();
+var IPCStream = require('electron-ipc-stream')
 
 var fs = require('fs');
-var fi = 0;
 
-function getArticles () { console.log("Articles! Yes!") }
-function dood () { console.log("Dood! Yes!") }
+var server = null;
+var port = 5555;
+var router = ruta3();
+var ipcs = new IPCStream('file');
 
-function writeResponse(url, response) {
-    var filename = "./".concat(url.replace(/\//g, '_').concat(".json"));
+function bindStore(store) {
+    function getSvdata(response) {
+        var data = zlib.gunzipSync(response).toString();
+        // return the JSON after "svdata="
+        var jsonString = data.substring(data.indexOf("svdata=")+1, data.length);
+        return JSON.parse(jsonString);
+    }
 
-    var wstream = fs.createWriteStream(filename);
-    // creates random Buffer of 100 bytes
-    wstream.write(response);
-    // create another Buffer of 100 bytes and write
-    wstream.end();
-    console.log("Saved ".concat(filename));
-}
+    function writeResponse(url, response) {
+        var filename = "./".concat(url.replace(/\//g, '_').concat(".json"));
 
-router.addRoute('/', writeResponse);
-router.addRoute('/kcsapi/api_port/port', writeResponse);
+        var wstream = fs.createWriteStream(filename);
+        wstream.write(response);
+        wstream.end();
+        console.log("Saved ".concat(filename));
+    }
+
+    function dispatchSortie(response) {
+        store.dispatch(sortie_action(getSvdata(response)))
+    }
+
+    router.addRoute('/', writeResponse);
+    router.addRoute('/kcsapi/api_req_sortie/battle', dispatchSortie);
+};
 
 function getHostPortFromString( hostString, defaultPort ) {
     var host = hostString;
@@ -55,7 +68,7 @@ function httpUserRequest( userRequest, userResponse ) {
 
     // have to extract the path from the requested URL
     var path = userRequest.url;
-    result = /^[a-zA-Z]+:\/\/[^\/]+(\/.*)?$/.exec( userRequest.url );
+    var result = /^[a-zA-Z]+:\/\/[^\/]+(\/.*)?$/.exec( userRequest.url );
     if ( result ) {
         if ( result[1].length > 0 ) {
             path = result[1];
@@ -69,13 +82,11 @@ function httpUserRequest( userRequest, userResponse ) {
         'port': hostport[1],
         'method': userRequest.method,
         'path': path,
-        // 'agent': userRequest.agent,
-        'agent': new ProxyAgent("http://108.61.183.228:3128"),
+        'agent': userRequest.agent,
+        // 'agent': new ProxyAgent("http://108.61.183.228:3128"),
         'auth': userRequest.auth,
         'headers': userRequest.headers
     };
-
-    responseStr = '';
 
     if ( debugging ) {
         console.log( '  > options: %s', JSON.stringify( options, null, 2 ) );
@@ -108,6 +119,7 @@ function httpUserRequest( userRequest, userResponse ) {
                     if ( debugging ) {
                         console.log( '  < chunk = %d bytes', chunk.length );
                     }
+                    cosnole.log("ASd");
 
                     buf = Buffer.concat([buf, chunk]);
                     userResponse.write( chunk );
@@ -122,11 +134,13 @@ function httpUserRequest( userRequest, userResponse ) {
                     }
                     userResponse.end();
 
-                    console.log(path);
-                    var args = router.match(path);
-                    if(args) {
-                        args.action(path, buf)
-                    }
+                    console.log(buf.toString());
+                    ipcs.write({ name: "dood" })
+
+                    // var args = router.match(path);
+                    // if(args) {
+                    //     args.action(buf)
+                    // }
                 }
             );
         }
@@ -161,31 +175,17 @@ function httpUserRequest( userRequest, userResponse ) {
             proxyRequest.end();
         }
     );
-}
+};
 
-function main() {
-    var port = 5555; // default port if none on command line
-
-    // check for any command line arguments
-    for ( var argn = 2; argn < process.argv.length; argn++ ) {
-        if ( process.argv[argn] === '-p' ) {
-            port = parseInt( process.argv[argn + 1] );
-            argn++;
-            continue;
-        }
-
-        if ( process.argv[argn] === '-d' ) {
-            debugging = 1;
-            continue;
-        }
-    }
+function startServer() {
+    port = 5555; // default port if none on command line
 
     if ( debugging ) {
         console.log( 'server listening on port ' + port );
     }
 
     // start HTTP server with custom request handler callback function
-    var server = http.createServer( httpUserRequest ).listen(port);
+    server = http.createServer( httpUserRequest ).listen(port);
 
     // add handler for HTTPS (which issues a CONNECT to the proxy)
     server.addListener(
@@ -279,6 +279,6 @@ function main() {
             );
         }
     ); // HTTPS connect listener
-}
+};
 
-main();
+startServer();

@@ -60,6 +60,7 @@ function getKoukuDamage(data) {
         return getBlankDamage();
     }
     var fdam = kouku.api_stage3.api_fdam;
+    // remove leading -1
     fdam.shift();
     return fdam;
 }
@@ -71,6 +72,7 @@ function getOpeningDamage(data) {
     }
 
     var fdam = opening_atack.api_fdam;
+    // remove leading -1
     fdam.shift();
     console.log(fdam)
     return fdam;
@@ -116,6 +118,7 @@ function getRaigekiDamage(data) {
     }
 
     var fdam = raigeki.api_fdam;
+    // remove leading -1
     fdam.shift();
     return fdam;
 }

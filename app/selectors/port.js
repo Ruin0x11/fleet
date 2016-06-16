@@ -61,7 +61,7 @@ const getDeck = (deck, shipList, shipInfoList) => {
     return {
         id: deck.api_id,
         name: deck.api_name,
-        ships: deck.api_ship.map(id => getShip(id, shipList, shipInfoList)).filter(n => true),
+        ships: deck.api_ship.map(id => getShip(id, shipList, shipInfoList)).filter(n => true), //remove empty ship slots
         missions: deck.api_mission
     }
 }

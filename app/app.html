@@ -19,45 +19,48 @@
      }());
     </script>
 
-  <style>
-  html {
-    box-sizing: border-box;
-  }
-  *, *:before, *:after {
-    box-sizing: inherit;
-  }
-  body {
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-      /* font-family: 'Helvetica Neue', 'Avenir Next', Verdana, sans-serif; */
-  }
-  </style>
+    <style>
+     html {
+         box-sizing: border-box;
+     }
+     *, *:before, *:after {
+         box-sizing: inherit;
+     }
+     body {
+         margin: 0;
+         padding: 0;
+         height: 100vh;
+         /* font-family: 'Helvetica Neue', 'Avenir Next', Verdana, sans-serif; */
+     }
+    </style>
   </head>
   <body>
     <div id="fleet"></div>
     <!-- <webview id="game" style="width:800; height:480px" preload="./inject.js" src="http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/" plugins></webview> -->
 
     <script>
-      (function() {
-        const script = document.createElement('script');
-        script.src = (process.env.HOT) ? 'http://localhost:3000/dist/bundle.js' : '../dist/bundle.js';
-        document.write(script.outerHTML);
-      }());
+     (function() {
+         const script = document.createElement('script');
+         script.src = (process.env.HOT) ? 'http://localhost:3000/dist/bundle.js' : '../dist/bundle.js';
+         document.write(script.outerHTML);
+     }());
     </script>
 
     <script>
      onload = () => {
          var ipc = require("ipc");
+         var IPCStream = require('electron-ipc-stream')
+         var ipcs = new IPCStream('file')
+
          const webview = document.getElementById('game');
          webview.addEventListener('console-message', function(e) {
              console.log('Guest page logged a message:', e.message);
          });
 
          webview.addEventListener("ipc-message", function (e) {
-            console.log(e);
-            webview.loadURL(e.args[0]);
-            webview.openDevTools();
+             console.log(e);
+             webview.loadURL(e.args[0]);
+             webview.openDevTools();
          });
 
          const indicator = document.querySelector('.indicator');
@@ -69,14 +72,14 @@
 
          const loadstop = () => {
              indicator.innerText = '';
-            webview.insertCSS("#sectionWrap{ visibility:hidden; }")
-            webview.insertCSS("#spacing_top{ display:none; }")
-            webview.insertCSS("#flashWrap{ overflow:hidden; margin:0; }")
-            webview.insertCSS("body{ overflow:hidden; margin:0; }")
+             webview.insertCSS("#sectionWrap{ visibility:hidden; }")
+             webview.insertCSS("#spacing_top{ display:none; }")
+             webview.insertCSS("#flashWrap{ overflow:hidden; margin:0; }")
+             webview.insertCSS("body{ overflow:hidden; margin:0; }")
              if (!did && webview.getTitle().indexOf("艦隊これくしょん -艦これ- - オンラインゲーム - DMM.com") > -1) {
                  did = true;
                  console.log('asd')
-                webview.send('ping');
+                 webview.send('ping');
              }
          };
 
