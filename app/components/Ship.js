@@ -15,10 +15,11 @@ export default class Ship extends Component {
 
     render() {
         return <tr>
-            <td><span className={styles.ship}>{this.props.id}</span></td>
+            <td><span className={styles.ship}>{this.props.name}</span></td>
             <td>{this.props.level}</td>
             <td>{this.props.nowExp}/{this.props.nextExp}</td>
-            <td><HealthBar percent={(this.props.nowHp/this.props.maxHp) * 100}/> {this.props.cond}</td>
+            <td><HealthBar percent={(this.props.nowHp/this.props.maxHp) * 100}/> <small>{this.props.nowHp} / {this.props.maxHp}</small></td>
+            <td>{this.props.cond}</td>
             </tr>;
     }
 

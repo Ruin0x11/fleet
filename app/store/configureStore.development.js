@@ -7,6 +7,10 @@ import { routerMiddleware } from 'react-router-redux';
 import rootReducer from '../reducers';
 import DevTools from '../containers/DevTools';
 
+import { port_update } from '../actions/port';
+import { ship_info_update } from '../actions/shipInfo';
+import { sortie_update } from '../actions/sortie';
+
 const logger = createLogger({
   level: 'info',
   collapsed: true,
@@ -24,8 +28,6 @@ const enhancer = compose(
   )
 );
 
-import { port_update } from '../actions/port';
-
 export default function configureStore(initialState) {
   const store = createStore(rootReducer, initialState, enhancer);
 
@@ -35,8 +37,12 @@ export default function configureStore(initialState) {
     );
   }
 
-  var parsedJSON = require('../api_port.json');
+  var parsedJSON = require('../api_start2.json');
+    store.dispatch(ship_info_update(parsedJSON));
+  parsedJSON = require('../api_port.json');
     store.dispatch(port_update(parsedJSON));
+  parsedJSON = require('../battle3.json');
+    store.dispatch(sortie_update(parsedJSON));
 
   return store;
 }

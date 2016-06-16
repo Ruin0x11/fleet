@@ -1,12 +1,11 @@
-import { PORT_UPDATE } from '../actions/port';
 import { SORTIE_UPDATE } from '../actions/sortie';
 
-const initialState = {}
+const initialState = {
+    sortieData: {}
+}
 
-export default function portReducer(state = initialState, action) {
+export default function sortieReducer(state = initialState, action) {
     switch (action.type) {
-    case PORT_UPDATE:
-        return action.data.api_data;
     case SORTIE_UPDATE:
         return updateFleetDamage(state, action.data.api_data);
     default:
@@ -16,20 +15,23 @@ export default function portReducer(state = initialState, action) {
 
 function updateFleetDamage(state, data) {
     //TODO: normalize
-    var fleet = state.api_deck_port[0].api_ship;
+        console.log(state)
+    if(typeof(state.portData) == 'undefined') {
+        return state;
+    }
+    var fleet = state.portData.api_deck_port[0].api_ship;
     // clone array
-    var shipList = state.api_ship.slice();
+    var shipList = state.portData.api_ship.slice();
     var damage = getShipDamage(data);
-
     for(var i = 0, len = fleet.length; i < len; i++) {
-        shipList.find(function (d) {
-            return d.api_id === fleet[i];
-        }).api_nowhp -= damage[i];
+        shipList[fleet[i]].api_nowhp -= damage[i];
         console.log(damage)
     }
 
-    return Object.assign({}, state, {
-        api_ship: shipList
+    return update(state, {
+        portData: {
+            api_ship: shipList
+        }
     })
 }
 
@@ -57,8 +59,9 @@ function getBlankDamage() {
 function getKoukuDamage(data) {
     var kouku = data.api_kouku;
     if(!kouku) {
-        return getBlankDamage();
+        return getBlankDamage;
     }
+
     var fdam = kouku.api_stage3.api_fdam;
     fdam.shift();
     return fdam;
@@ -67,12 +70,11 @@ function getKoukuDamage(data) {
 function getOpeningDamage(data) {
     var opening_attack = data.api_opening_attack;
     if(!opening_attack) {
-        return getBlankDamage();
+        return getBlankDamage;
     }
 
     var fdam = opening_atack.api_fdam;
     fdam.shift();
-    console.log(fdam)
     return fdam;
 }
 
@@ -102,11 +104,11 @@ function getHougekiDamage(data) {
 
     for(var i = 0, len = stages.length; i < len; i++) {
         if(data[stages[i]]) {
-            var currentDamage = getSingleHougekiDamage(data[stages[i]])
+            var curentDamage = getSingleHougekiDamage(stages[i])
+
             shipDamage = mergeDamages(shipDamage, currentDamage)
         }
     }
-    return shipDamage;
 }
 
 function getRaigekiDamage(data) {

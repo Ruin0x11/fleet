@@ -6,6 +6,11 @@ import ShipList from '../components/ShipList';
 import { getDeckList } from '../selectors/port';
 
 function mapStateToProps (state) {
+    if(!state.portData.api_deck_port) {
+        return {
+            currentDeck: -1
+        };
+    }
     return {
         decks: getDeckList(state),
         currentDeck: 0
@@ -14,8 +19,7 @@ function mapStateToProps (state) {
 
 const ShipListContainer = React.createClass({
     render() {
-        console.log(this.props)
-        return <ShipList currentDeck={1} {...this.props} />;
+        return <ShipList {...this.props} />;
     }
 });
 
