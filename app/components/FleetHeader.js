@@ -17,18 +17,6 @@ export default class FleetHeader extends Component {
             ...playerDataPropTypes
     }
 
-    getDefaultProps () {
-        return {
-            nickname: "",
-            comment: "",
-            level: -1,
-            rank: -1,
-            numChara: -1,
-            maxChara: -1,
-            maxEquip: -1
-        };
-    }
-
     constructor(props) {
         super(props);
     }

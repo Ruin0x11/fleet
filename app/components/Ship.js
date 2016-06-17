@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { Link } from 'react-router';
-import styles from './ShipList.css';
+import styles from './Ship.css';
 import { shipPropTypes } from './ShipList';
 import HealthBar from './HealthBar';
 
@@ -13,14 +13,50 @@ export default class Ship extends Component {
         super(props);
     }
 
-    render() {
-        return <tr>
-            <td><span className={styles.ship}>{this.props.name}</span></td>
-            <td>{this.props.level}</td>
-            <td>{this.props.nowExp}/{this.props.nextExp}</td>
-            <td><HealthBar percent={(this.props.nowHp/this.props.maxHp) * 100}/> <small>{this.props.nowHp} / {this.props.maxHp}</small></td>
-            <td>{this.props.cond}</td>
-            </tr>;
+    getConditionColor(condition) {
+        var g, b;
+        if(condition > 50) {
+            g = 255;
+            b = Math.floor(255 * (condition / 50))
+        }
+        else {
+            g = Math.floor(255 * (condition / 50));
+            b = 0
+        }
+        return "rgb(255," + g + "," + b + ")"
     }
 
+    render() {
+        return <tr>
+          <td><span className={styles.name}>
+            {this.props.name}
+          </span></td>
+
+          <td><span className={styles.desc}>
+            Lv.
+          </span>
+          {this.props.level}
+          </td>
+
+          <td style={{ textAlign: 'right'}}>
+            <span>
+              {this.props.nowExp}
+            </span>
+          </td>
+          <td>
+            <span className={styles.desc}>
+              / {this.props.nextExp}
+            </span>
+          </td>
+          <td>
+            <HealthBar percent={(this.props.nowHp/this.props.maxHp) * 100} />
+            <small>{this.props.nowHp} / {this.props.maxHp}</small>
+          </td>
+          <td>{this.props.cond}
+            <div style= {{ background: this.getConditionColor(this.props.cond)}}
+                 className={styles.condition}>
+            </div>
+          </td>
+        </tr>;
+    }
 }

@@ -1,7 +1,7 @@
 .container {
   position: relative;
-  top: 48px;
-  height: 216px;
+  top: 3em;
+  height: 13.5em;
   display: flex;
   padding-top: 4px;
   /* left: 10px; */
@@ -9,13 +9,31 @@
   /* background-color: grey; */
 }
 
-.sidearea {
+.leftarea {
   width: 15%;
   height: inherit;
 }
 
 .mainarea {
+  display: flex;
   flex-grow: 1;
   height: inherit;
   background: #2B2D42;
+}
+
+.message {
+  height: 2em;
+  width: 100%;
+}
+
+.shiplist {
+  width: 70%;
+  height: inherit;
+  position: relative;
+}
+
+.rightarea {
+  flex-grow: 1;
+  height: inherit;
+  background: #33354A;
 }

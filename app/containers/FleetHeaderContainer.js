@@ -18,4 +18,3 @@ const FleetHeaderContainer = React.createClass({
 });
 
 export default connect(mapStateToProps)(FleetHeaderContainer);
-

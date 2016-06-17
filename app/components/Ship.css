@@ -1,4 +1,24 @@
+.name {
+  font-size: 1.15em;
+}
+
 .desc {
   font-size: 10px;
   color: #DDE2E4;
+}
+
+.condition {
+  float: right;
+  width: .9em;
+  height: .9em;
+  border: 1px solid #FFFFFF;
+  vertical-align: middle;
+  margin-top: .1em;
+  margin-left: .1em;
+
+  -o-transition:color .2s ease-out, background 2s ease-in;
+  -ms-transition:color .2s ease-out, background 2s ease-in;
+  -moz-transition:color .2s ease-out, background 2s ease-in;
+  -webkit-transition:color .2s ease-out, background 2s ease-in;
+  transition:color .2s ease-out, background 2s ease-in;
 }

@@ -34,10 +34,22 @@ export default class FleetHeader extends Component {
 
     render() {
         return (
-                <table className={styles.header}>
-                <tbody>
-                </tbody>
-                </table>
+            <div className={styles.header}>
+              <ul>
+                <h3>asdf</h3>
+                <li>1: 12:34:56</li>
+                <li>2: 12:34:56</li>
+                <li>3: 12:34:56</li>
+                <li>4: 12:34:56</li>
+              </ul>
+              <ul>
+                <h3>asdf</h3>
+                <li>1: 12:34:56</li>
+                <li>2: 12:34:56</li>
+                <li>3: 12:34:56</li>
+                <li>4: 12:34:56</li>
+              </ul>
+            </div>
         );
     }
 }

@@ -1,7 +1,6 @@
 .header {
   width: 100%;
   text-align: left;
-  background-color: #8D99AE;
   padding-left: 10px;
   /* display: inline-block; */
   /* box-sizing: border-box; */
@@ -12,52 +11,4 @@
 
 .name {
   font-size: 2rem;
-}
-
-/* .title {
- */
-/*     font-size: 2rem; */
-/* } */
-
-.row{
-  width:100%;
-  height: inherit;
-  /* border:4px solid #000; */
-  display:inline-block;
-  height: 24px;
-  bottom: 0;
-  font-size: 16px;
-}
-
-.pic{
-  width:25%;
-  height: inherit;
-  /* border:1px solid #00f; */
-  display:inline-block;
-}
-.title{
-  width:34%;
-  height: inherit;
-  /* border:1px solid #f00; */
-  display:inline-block;
-}
-.desc{
-  width:18%;
-  height: inherit;
-  /* border:1px solid #0ff; */
-  display:inline-block;
-}
-.id{
-  width:18%;
-  height: inherit;
-  /* border:1px solid #f0f; */
-  display:inline-block;
-}
-.miscinfo {
-  font-size: 15px;
-  color: #DDE2E4;
-}
-
-.phrase {
-  font-size: 11px;
 }

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 require('rc-progress/assets/index.css');
 var Line = require('rc-progress').Line;
+import styles from './HealthBar.css';
 
 export default class HealthBar extends Component {
     static propTypes = {
@@ -18,37 +19,56 @@ export default class HealthBar extends Component {
     };
 
     componentDidMount() {
-        this.handleProps(this.props)
+        this.changeState(this.props)
     }
 
-    handleProps = (props) => {
-        this.setState({
-            percent: props.percent
-        });
-    };
+    componentWillReceiveProps(nextProps) {
+        this.changeState(nextProps)
+    }
 
-    changeState() {
-        var colorMap = ["#3FC7FA", "#85D262", "#FE8C6A"]
+    percentToRGB(percent) {
+        if (percent === 100) {
+            percent = 99
+        }
+        percent = 100 - percent
+        var r, g, b;
+
+        if (percent < 50) {
+            // green to yellow
+            r = Math.floor(255 * (percent / 50));
+            g = 255;
+
+        } else {
+            // yellow to red
+            r = 255;
+            g = Math.floor(255 * ((50 - percent % 50) / 50));
+        }
+        b = 0;
+
+        return "rgb(" + r + "," + g + "," + b + ")";
+    }
+
+    changeState(nextProps) {
         this.setState({
-            percent: this.state.percent,
-            color: colorMap[parseInt(Math.random()*3)]
+            percent: nextProps.percent,
+            color: this.percentToRGB(nextProps.percent)
         });
     }
 
     render() {
-        var containerStyle = {
-            "width": "250px",
-            "display": "inline-block"
-        }
-        var circleContainerStyle = {
-            "width": "250px",
-            "height": "250px"
-        }
         let {percent, color} = this.state;
         return (
-                <div style={containerStyle}>
-                <Line percent={percent} strokeWidth="4" strokeColor={color} />
+                <div className={styles.container}>
+
+                <div className={styles.segmentcontainer}>
+                <span className={styles.segment}/>
+                <span className={styles.segment}/>
+                <span className={styles.segment}/>
+                <span className={styles.segment}/>
+                </div>
+                <Line percent={percent} strokeWidth="4" strokeColor={color}/>
                 </div>
         );
     }
 }
+
