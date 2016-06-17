@@ -49,7 +49,10 @@ export default class ShipList extends Component {
         }
         var ships = this.props.decks[this.props.currentDeck].ships;
         return (
-                <table><tbody>{ships.map(ship => <Ship key={ship.id} {...ship}/>)}</tbody></table>
+                <table className={styles.container}>
+                <tbody>{ships.map(ship => <Ship key={ship.id} {...ship}/>)}
+                </tbody>
+                </table>
         );
     }
 }

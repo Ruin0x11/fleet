@@ -6,10 +6,10 @@ export default class FleetTabs extends Component {
   render() {
     return (
         <div className={styles.container}>
-            <div className={styles.tab}> <p>dood </p></div>
-            <div className={styles.tab}> <p>dood </p></div>
-            <div className={styles.tab}> <p>dood </p></div>
-            <div className={styles.tab}> <p>dood </p></div>
+            <div className={styles.tab}> <span>dood </span></div>
+            <div className={styles.tab}> <span>dood </span></div>
+            <div className={styles.tab}> <span>dood </span></div>
+            <div className={styles.tab}> <span>dood </span></div>
         </div>
     );
   }

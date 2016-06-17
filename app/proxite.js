@@ -17,30 +17,29 @@ var port = 5555;
 var router = ruta3();
 var ipcs = new IPCStream('file');
 
-function bindStore(store) {
-    function getSvdata(response) {
-        var data = zlib.gunzipSync(response).toString();
-        // return the JSON after "svdata="
-        var jsonString = data.substring(data.indexOf("svdata=")+1, data.length);
-        return JSON.parse(jsonString);
-    }
 
-    function writeResponse(url, response) {
-        var filename = "./".concat(url.replace(/\//g, '_').concat(".json"));
+function getSvdata(response) {
+    var data = zlib.gunzipSync(response).toString();
+    // return the JSON after "svdata="
+    var jsonString = data.substring(data.indexOf("svdata=")+1, data.length);
+    return JSON.parse(jsonString);
+}
 
-        var wstream = fs.createWriteStream(filename);
-        wstream.write(response);
-        wstream.end();
-        console.log("Saved ".concat(filename));
-    }
+function writeResponse(url, response) {
+    var filename = "./".concat(url.replace(/\//g, '_').concat(".json"));
 
-    function dispatchSortie(response) {
-        store.dispatch(sortie_action(getSvdata(response)))
-    }
+    var wstream = fs.createWriteStream(filename);
+    wstream.write(response);
+    wstream.end();
+    console.log("Saved ".concat(filename));
+}
 
-    router.addRoute('/', writeResponse);
-    router.addRoute('/kcsapi/api_req_sortie/battle', dispatchSortie);
-};
+function dispatchSortie(response) {
+    // store.dispatch(sortie_action(getSvdata(response)))
+}
+
+router.addRoute('/', writeResponse);
+router.addRoute('/kcsapi/api_req_sortie/battle', dispatchSortie);
 
 function getHostPortFromString( hostString, defaultPort ) {
     var host = hostString;
@@ -77,13 +76,20 @@ function httpUserRequest( userRequest, userResponse ) {
         }
     }
 
+    var agent;
+
+    if(hostport[0] == "localhost") {
+        agent = userRequest.agent;
+    } else {
+        agent = new ProxyAgent("http://210.254.22.13:8080")
+    }
+
     var options = {
         'host': hostport[0],
         'port': hostport[1],
         'method': userRequest.method,
         'path': path,
-        'agent': userRequest.agent,
-        // 'agent': new ProxyAgent("http://108.61.183.228:3128"),
+        'agent': agent,
         'auth': userRequest.auth,
         'headers': userRequest.headers
     };
@@ -119,8 +125,6 @@ function httpUserRequest( userRequest, userResponse ) {
                     if ( debugging ) {
                         console.log( '  < chunk = %d bytes', chunk.length );
                     }
-                    cosnole.log("ASd");
-
                     buf = Buffer.concat([buf, chunk]);
                     userResponse.write( chunk );
                 }
@@ -135,12 +139,13 @@ function httpUserRequest( userRequest, userResponse ) {
                     userResponse.end();
 
                     console.log(buf.toString());
-                    ipcs.write({ name: "dood" })
+                    // ipcs.write({ name: "dood" })
+                    ipcs.write(getSvdata(buf))
 
-                    // var args = router.match(path);
-                    // if(args) {
-                    //     args.action(buf)
-                    // }
+                    var args = router.match(path);
+                    if(args) {
+                        args.action(buf)
+                    }
                 }
             );
         }

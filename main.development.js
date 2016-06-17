@@ -45,8 +45,8 @@ app.on('ready', () => {
     backgroundWindow.loadURL(`file://${__dirname}/app/proxite.html`);
 
     // we have to wait for the proxy server to initialize first,
-    // otherwise bundle.js fails to load. so, set a five-second timeout
-    setTimeout(continueSetup, 5000)
+    // otherwise bundle.js fails to load. so, set a timeout
+    setTimeout(continueSetup, 2000)
 });
 function continueSetup() {
     mainWindow.loadURL(`file://${__dirname}/app/app.html`);

@@ -1,13 +1,11 @@
-/* ul { */
-/*   padding-top: 4px; */
-/* } */
-
-/* li { */
-/*   height: 20px; */
-/*   font-size: 18px; */
-/*   margin-top:8px; */
-/* } */
-
+.container {
+  position: absolute;
+  top: 32px;
+}
 .ship {
   font-size: 18px;
+}
+
+tr {
+  height: 25px;
 }

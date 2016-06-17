@@ -17,7 +17,6 @@ export default class FleetHeader extends Component {
             ...playerDataPropTypes
     }
 
-
     getDefaultProps () {
         return {
             nickname: "",
