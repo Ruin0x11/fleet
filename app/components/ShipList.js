@@ -25,7 +25,7 @@ export const deckPropTypes = {
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
     ships: PropTypes.arrayOf(PropTypes.shape({
-            ...shipPropTypes
+        ...shipPropTypes
     })).isRequired,
     missions: PropTypes.array.isRequired,
 }
@@ -34,7 +34,7 @@ export const deckPropTypes = {
 export default class ShipList extends Component {
     static propTypes = {
         decks: PropTypes.arrayOf(PropTypes.shape({
-                ...deckPropTypes
+            ...deckPropTypes
         }).isRequired).isRequired,
         currentDeck: PropTypes.number.isRequired
     }
@@ -49,10 +49,10 @@ export default class ShipList extends Component {
         }
         var ships = this.props.decks[this.props.currentDeck].ships;
         return (
-                <table className={styles.container}>
-                <tbody>{ships.map(ship => <Ship key={ship.id} {...ship}/>)}
-                </tbody>
-                </table>
+            <table className={styles.container}>
+              <tbody>{ships.map(ship => <Ship key={ship.id} {...ship}/>)}
+              </tbody>
+            </table>
         );
     }
 }

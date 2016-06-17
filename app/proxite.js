@@ -3,7 +3,12 @@ var net = require('net');
 var ProxyAgent = require('proxy-agent');
 var zlib = require('zlib');
 
-var debugging = 1;
+// ES6 exports are unsupported, so actions are written in ES5
+var shipInfoUpdate = require('./actions/shipInfo').ship_info_update
+var portUpdate = require('./actions/port').port_update
+var sortieUpdate = require('./actions/sortie').sortie_update
+
+var debugging = 0;
 
 var regex_hostport = /^([^:]+)(:([0-9]+))?$/;
 
@@ -17,11 +22,12 @@ var port = 5555;
 var router = ruta3();
 var ipcs = new IPCStream('file');
 
+const {ipcRenderer} = require('electron');
 
 function getSvdata(response) {
     var data = zlib.gunzipSync(response).toString();
     // return the JSON after "svdata="
-    var jsonString = data.substring(data.indexOf("svdata=")+1, data.length);
+    var jsonString = data.substring(data.indexOf("svdata=")+7, data.length);
     return JSON.parse(jsonString);
 }
 
@@ -34,11 +40,28 @@ function writeResponse(url, response) {
     console.log("Saved ".concat(filename));
 }
 
-function dispatchSortie(response) {
-    // store.dispatch(sortie_action(getSvdata(response)))
+function dispatch(type, response) {
+    ipcRenderer.send('dispatch',
+                     {
+                         type: type,
+                         data: getSvdata(response)
+                     });
 }
 
-router.addRoute('/', writeResponse);
+function dispatchShipInfo(response) {
+    dispatch('shipInfo', response)
+}
+
+function dispatchSortie(response) {
+    dispatch('sortie', response)
+}
+
+function dispatchPort(response) {
+    dispatch('port', response)
+}
+
+router.addRoute('/kcsapi/api_start2', dispatchShipInfo);
+router.addRoute('/kcsapi/api_port/port', dispatchPort);
 router.addRoute('/kcsapi/api_req_sortie/battle', dispatchSortie);
 
 function getHostPortFromString( hostString, defaultPort ) {
@@ -81,7 +104,7 @@ function httpUserRequest( userRequest, userResponse ) {
     if(hostport[0] == "localhost") {
         agent = userRequest.agent;
     } else {
-        agent = new ProxyAgent("http://210.254.22.13:8080")
+        agent = new ProxyAgent("http://163.54.70.3:80")
     }
 
     var options = {
@@ -114,9 +137,6 @@ function httpUserRequest( userRequest, userResponse ) {
                 proxyResponse.headers
             );
 
-            console.log(proxyResponse.statusCode)
-            console.log(proxyResponse.headers)
-
             var buf = Buffer.alloc(0);
 
             proxyResponse.on(
@@ -138,12 +158,9 @@ function httpUserRequest( userRequest, userResponse ) {
                     }
                     userResponse.end();
 
-                    console.log(buf.toString());
-                    // ipcs.write({ name: "dood" })
-                    ipcs.write(getSvdata(buf))
-
                     var args = router.match(path);
                     if(args) {
+                        console.log(path)
                         args.action(buf)
                     }
                 }
@@ -157,8 +174,8 @@ function httpUserRequest( userRequest, userResponse ) {
             userResponse.writeHead( 500 );
             userResponse.write(
                 "<h1>500 Error</h1>\r\n" +
-                    "<p>Error was <pre>" + error + "</pre></p>\r\n" +
-                    "</body></html>\r\n"
+                "<p>Error was <pre>" + error + "</pre></p>\r\n" +
+                "</body></html>\r\n"
             );
             userResponse.end();
         }

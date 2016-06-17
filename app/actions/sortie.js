@@ -1,6 +1,7 @@
-export const SORTIE_UPDATE = 'SORTIE_UPDATE';
+const SORTIE_UPDATE = exports.SORTIE_UPDATE = 'SORTIE_UPDATE';
 
-export function sortie_update(data) {
+exports.sortie_update = sortie_update
+function sortie_update(data) {
     return {
         type: SORTIE_UPDATE,
         data: data

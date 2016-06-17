@@ -12,37 +12,30 @@ import { ship_info_update } from '../actions/shipInfo';
 import { sortie_update } from '../actions/sortie';
 
 const logger = createLogger({
-  level: 'info',
-  collapsed: true,
+    level: 'info',
+    collapsed: true,
 });
 
 const router = routerMiddleware(hashHistory);
 
 const enhancer = compose(
-  applyMiddleware(thunk, router, logger),
-  DevTools.instrument(),
-  persistState(
-    window.location.href.match(
-      /[?&]debug_session=([^&]+)\b/
+    applyMiddleware(thunk, router, logger),
+    DevTools.instrument(),
+    persistState(
+        window.location.href.match(
+            /[?&]debug_session=([^&]+)\b/
+        )
     )
-  )
 );
 
 export default function configureStore(initialState) {
-  const store = createStore(rootReducer, initialState, enhancer);
+    const store = createStore(rootReducer, initialState, enhancer);
 
-  if (module.hot) {
-    module.hot.accept('../reducers', () =>
-      store.replaceReducer(require('../reducers')) // eslint-disable-line global-require
-    );
-  }
+    if (module.hot) {
+        module.hot.accept('../reducers', () =>
+            store.replaceReducer(require('../reducers')) // eslint-disable-line global-require
+        );
+    }
 
-  var parsedJSON = require('../api_start2.json');
-    store.dispatch(ship_info_update(parsedJSON));
-  parsedJSON = require('../api_port.json');
-    store.dispatch(port_update(parsedJSON));
-  parsedJSON = require('../battle3.json');
-    store.dispatch(sortie_update(parsedJSON));
-
-  return store;
+    return store;
 }

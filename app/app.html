@@ -63,15 +63,15 @@
              webview.openDevTools();
          });
 
-         const indicator = document.querySelector('.indicator');
-
+         /* const indicator = document.querySelector('.indicator');
+          */
          const loadstart = () => {
-             indicator.innerText = 'loading...';
+             /* indicator.innerText = 'loading...';*/
          };
          var did = false;
 
          const loadstop = () => {
-             indicator.innerText = '';
+             /* indicator.innerText = '';*/
              webview.insertCSS("#sectionWrap{ visibility:hidden; }")
              webview.insertCSS("#spacing_top{ display:none; }")
              webview.insertCSS("#flashWrap{ overflow:hidden; margin:0; }")

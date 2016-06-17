@@ -7,8 +7,9 @@
 }
 
 .container {
-  width: 200px;
+  width: 10em;
   display: inline-block;
+  margin-right: .5em;
 }
 
 .segmentcontainer {

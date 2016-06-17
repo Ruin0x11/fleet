@@ -15,7 +15,6 @@ export default class FleetBody extends Component {
             </div>
                 <div className={styles.mainarea}>
                     <div className={styles.message}>
-                            <NotifierContainer />
                     <div style={{display: 'flex'}}>
                         <ShipListContainer />
                         <DockInfoContainer />

@@ -37,9 +37,7 @@ app.on('ready', () => {
     })
 
     backgroundWindow = new BrowserWindow();
-    // if (!debug) {
-    //   backgroundWindow.hide();
-    // }
+    backgroundWindow.hide();
 
     // load the proxy server
     backgroundWindow.loadURL(`file://${__dirname}/app/proxite.html`);
@@ -273,3 +271,7 @@ function continueSetup() {
         mainWindow.setMenu(menu);
     }
 }
+
+ipcMain.on('dispatch', (_, arg) => {
+    mainWindow.webContents.send('dispatch', arg);
+});

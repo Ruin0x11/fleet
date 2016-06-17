@@ -12,23 +12,23 @@ export default class Notifier extends Component {
         super(props);
 
         this.state = {
-            isActive: true
+            isActive: false
         }
     }
 
     style() {
         return {
-            'max-height': '0',
-            'overflow-y': 'hidden',
+            'maxReight': '0em',
+            'overflowY': 'hidden',
             'position': 'relative',
             'bottom': '0em',
             'left': '0em',
-            'padding-top': '0em',
-            'padding-bottom': '0em',
-            'padding-left': '.5em',
+            'paddingTop': '0em',
+            'paddingBottom': '0em',
+            'paddingLeft': '.5em',
             'background': '#Cc1b00',
-            'border-radius': '0px',
-            'font-size': '.9em',
+            'borderRadius': '0px',
+            'fontSize': '.9em',
             'WebKittransition': '.5s cubic-bezier(0, 1, 0.5, 1)',
             'MozTransition': '.5s cubic-bezier(0, 1, 0.5, 1)',
             'msTransition': '.5s cubic-bezier(0, 1, 0.5, 1)',

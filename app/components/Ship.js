@@ -15,9 +15,9 @@ export default class Ship extends Component {
 
     getConditionColor(condition) {
         var g, b;
-        if(condition > 50) {
+        if(condition > 49) {
             g = 255;
-            b = Math.floor(255 * (condition / 50))
+            b = Math.floor(255 * ((50 - condition % 50) / 50));
         }
         else {
             g = Math.floor(255 * (condition / 50));
@@ -40,13 +40,13 @@ export default class Ship extends Component {
 
           <td style={{ textAlign: 'right'}}>
             <span>
-              {this.props.nowExp}
+            <span className={styles.desc}>
+              TNL
+            </span>
             </span>
           </td>
           <td>
-            <span className={styles.desc}>
-              / {this.props.nextExp}
-            </span>
+              {this.props.nextExp}
           </td>
           <td>
             <HealthBar percent={(this.props.nowHp/this.props.maxHp) * 100} />
