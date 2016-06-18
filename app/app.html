@@ -48,9 +48,10 @@
 
     <script>
      onload = () => {
+         require('electron-cookies');
          var ipc = require("ipc");
-         var IPCStream = require('electron-ipc-stream')
-         var ipcs = new IPCStream('file')
+         var IPCStream = require('electron-ipc-stream');
+         var ipcs = new IPCStream('file');
 
          const webview = document.getElementById('game');
          webview.addEventListener('console-message', function(e) {

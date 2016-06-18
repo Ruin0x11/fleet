@@ -15,7 +15,7 @@ export default class Ship extends Component {
 
     getConditionColor(condition) {
         var g, b;
-        if(condition > 49) {
+        if(condition > 50) {
             g = 255;
             b = Math.floor(255 * ((50 - condition % 50) / 50));
         }

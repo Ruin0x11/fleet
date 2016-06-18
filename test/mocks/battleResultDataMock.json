@@ -4,7 +4,7 @@
  {"api_ship_id":[-1,1,-1,-1,-1,-1,-1],
   "api_win_rank":"S",
   "api_get_exp":100,
-  "api_mvp":3,
+  "api_mvp":1,
   "api_member_lv":32,
   "api_member_exp":50000,
   "api_get_base_exp":300,

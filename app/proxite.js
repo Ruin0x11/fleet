@@ -47,17 +47,24 @@ function dispatchShipInfo(response) {
     dispatch('shipInfo', response)
 }
 
+function dispatchPort(response) {
+    dispatch('port', response)
+}
+
 function dispatchSortie(response) {
     dispatch('sortie', response)
 }
 
-function dispatchPort(response) {
-    dispatch('port', response)
+function dispatchBattleResult(response) {
+    dispatch('battleResult', response)
 }
 
 router.addRoute('/kcsapi/api_start2', dispatchShipInfo);
 router.addRoute('/kcsapi/api_port/port', dispatchPort);
 router.addRoute('/kcsapi/api_req_sortie/battle', dispatchSortie);
+router.addRoute('/kcsapi/api_req_practice/battle', dispatchSortie);
+router.addRoute('/kcsapi/api_req_sortie/battleresult', dispatchBattleResult);
+router.addRoute('/kcsapi/api_req_practice/battleresult', dispatchBattleResult);
 
 function getHostPortFromString( hostString, defaultPort ) {
     var host = hostString;
@@ -99,7 +106,7 @@ function httpUserRequest( userRequest, userResponse ) {
     if(hostport[0] == "localhost") {
         agent = userRequest.agent;
     } else {
-        agent = new ProxyAgent("http://163.54.70.3:80")
+        agent = new ProxyAgent("http://210.254.22.13:8080")
     }
 
     var options = {

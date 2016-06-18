@@ -9,9 +9,9 @@ export default function portReducer(state = initialState, action) {
         case PORT_UPDATE:
             return action.data.api_data;
         case SORTIE_UPDATE:
-            return updateFleetDamage(state, action.data.api_data);
+            return updateFromBattle(state, action.data.api_data)
         case BATTLE_RESULT_UPDATE:
-            return updateGainedExperience(state, action.data.api_data)
+            return updateFromResult(state, action.data.api_data)
         default:
             return state;
     }
@@ -23,16 +23,33 @@ function getShip(shipList, index) {
     });
 }
 
-function updateFleetDamage(state, data) {
-    //TODO: normalize
+function updateFromBattle(state, data) {
+    state = updateFleetDamage(state, data);
+    state = updateCondition(state, data, getConditionFromBattle)
+    return state
+}
+
+function updateFromResult(state, data) {
+    state = updateGainedExperience(state, data);
+    state = updateCondition(state, data, getConditionFromResult)
+    return state
+}
+
+function updateCondition(state, data, func) {
     var fleet = state.api_deck_port[0].api_ship;
-    // clone array
     var shipList = state.api_ship.slice();
-    var damage = getShipDamage(data);
+    var conditionChange = func(data);
 
     for(var i = 0, len = fleet.length; i < len; i++) {
         var ship = getShip(shipList, fleet[i])
-        ship.api_nowhp -= damage[i];
+        ship.api_cond += conditionChange[i];
+        console.log(ship.api_cond)
+        if(ship.api_cond > 100) {
+            ship.api_cond = 100;
+        }
+        else if(ship.api_cond < 0) {
+            ship.api_cond = 0;
+        }
     }
 
     return Object.assign({}, state, {
@@ -40,8 +57,71 @@ function updateFleetDamage(state, data) {
     })
 }
 
+function getConditionFromBattle(data) {
+    var gainedCondition;
+    if(data.api_midnight_flag > 0) {
+        gainedCondition = -2;
+    } else {
+        gainedCondition = -3;
+    }
+
+    return getInitializedArray(gainedCondition);
+}
+
+function getConditionFromResult(data) {
+    var gainedCondition;
+
+    // http://wikiwiki.jp/kancolle/?%C8%E8%CF%AB%C5%D9#q06a71aa
+    switch(data.api_win_rank) {
+        case "S":
+            gainedCondition = 4;
+            break;
+        case "A":
+            gainedCondition = 3;
+            break;
+        case "B":
+            gainedCondition = 2;
+            break;
+        case "C":
+            gainedCondition = 1;
+            break;
+        case "D":
+        case "E":
+        default:
+            gainedCondition = 0;
+    }
+
+    // flagship
+    if(data.api_win_rank != "D" && data.api_win_rank != "E") {
+        conditionArray[0] += 3;
+    }
+
+    // arrays are 1-indexed
+    conditionArray[data.api_mvp-1] += 10
+
+    return conditionArray;
+}
+
+function updateFleetDamage(state, data) {
+    var fleet = state.api_deck_port[0].api_ship;
+    var shipList = state.api_ship.slice();
+    var damage = getShipDamage(data);
+
+    for(var i = 0, len = fleet.length; i < len; i++) {
+        var ship = getShip(shipList, fleet[i])
+        ship.api_nowhp -= damage[i];
+        if(ship.api_nowhp < 0) {
+            ship.api_nowhp = 0;
+        }
+    }
+
+    return Object.assign({}, state, {
+        api_ship: shipList
+    });
+}
+
 function getShipDamage(data) {
-    var shipDamage = getBlankDamage();
+    var shipDamage = getInitializedArray(0);
     shipDamage = mergeDamages(shipDamage, getKoukuDamage(data));
     shipDamage = mergeDamages(shipDamage, getOpeningDamage(data));
     shipDamage = mergeDamages(shipDamage, getHougekiDamage(data));
@@ -56,15 +136,15 @@ function mergeDamages(damageA, damageB) {
     });
 }
 
-function getBlankDamage() {
-    // initialize damage to zero for all 6 ships
-    return Array.apply(null, Array(6)).map(Number.prototype.valueOf,0);
+function getInitializedArray(value) {
+    // initialize array to 'value' for all 6 ships
+    return Array.apply(null, Array(6)).map(Number.prototype.valueOf,value);
 }
 
 function getKoukuDamage(data) {
     var kouku = data.api_kouku;
     if(!kouku) {
-        return getBlankDamage();
+        return getInitializedArray(0);
     }
     var fdam = kouku.api_stage3.api_fdam;
     // remove leading -1
@@ -76,7 +156,7 @@ function getOpeningDamage(data) {
     // attack is misspelled as "atack"
     var opening_atack = data.api_opening_atack;
     if(!opening_atack) {
-        return getBlankDamage();
+        return getInitializedArray(0);
     }
 
     var fdam = opening_atack.api_fdam;
@@ -89,7 +169,7 @@ function getSingleHougekiDamage(hougeki) {
     var df_list = hougeki.api_df_list;
     var damage = hougeki.api_damage;
 
-    var shipDamage = getBlankDamage();
+    var shipDamage = getInitializedArray(0);
     for (var i = 0, len = df_list.length; i < len; i++) {
         // TODO: find case with multiple damages in single attack
         var target = df_list[i][0];
@@ -105,7 +185,7 @@ function getSingleHougekiDamage(hougeki) {
 }
 
 function getHougekiDamage(data) {
-    var shipDamage = getBlankDamage();
+    var shipDamage = getInitializedArray(0);
 
     var stages = ["api_hougeki1", "api_hougeki2", "api_hougeki3"]
 
@@ -121,7 +201,7 @@ function getHougekiDamage(data) {
 function getRaigekiDamage(data) {
     var raigeki = data.api_raigeki;
     if(!raigeki) {
-        return getBlankDamage();
+        return getInitializedArray(0);
     }
 
     var fdam = raigeki.api_fdam;
