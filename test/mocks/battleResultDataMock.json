@@ -6,7 +6,7 @@
   "api_get_exp":100,
   "api_mvp":3,
   "api_member_lv":32,
-  "api_member_exp":51816,
+  "api_member_exp":50000,
   "api_get_base_exp":300,
   "api_get_ship_exp":[-1,540,360,720,360,360,360],
   "api_get_exp_lvup":[[1200,1500,2100],[14581,15300],[36025,37800],[7548,7800,9100],[20182,21000],[6617,7800]],

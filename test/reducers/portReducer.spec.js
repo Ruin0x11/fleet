@@ -47,13 +47,19 @@ describe('reducers', () => {
             const { portData, battleResultData } = setup();
             var state = portReducer({}, { type: PORT_UPDATE, data: portData });
             var ships = state.api_ship
+            var playerExp = state.api_basic.api_experience
             expect(ships[0].api_exp[0]).to.equal(30000); // total
             expect(ships[0].api_exp[1]).to.equal(1200);  // to next level
+            expect(playerExp).to.equal(50000);  // to next level
+
             var result = portReducer(state, { type: BATTLE_RESULT_UPDATE, data: battleResultData })
             ships = result.api_ship
+            playerExp = state.api_basic.api_experience
             // gained 540 experience, level up was at 1500
             expect(ships[0].api_exp[0]).to.equal(30540);
             expect(ships[0].api_exp[1]).to.equal(240);
+            // gained 100 experience
+            expect(playerExp).to.equal(50100);  // to next level
         });
 
         it('should handle unknown action type', () => {

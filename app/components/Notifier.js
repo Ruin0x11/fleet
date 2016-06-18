@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { Link } from 'react-router';
 import styles from './Notifier.css';
 import { Notification } from 'react-notification';
+const notifier = require('node-notifier');
 
 export default class Notifier extends Component {
     static propTypes = {
@@ -14,6 +15,9 @@ export default class Notifier extends Component {
         this.state = {
             isActive: false
         }
+
+        setTimeout(this.desktopNotify, 400);
+        setTimeout(this.desktopNotify, 700);
     }
 
     style() {
@@ -49,6 +53,14 @@ export default class Notifier extends Component {
         this.setState({
             isActive: !this.state.isActive
         })
+    }
+
+    desktopNotify() {
+        notifier.notify({
+            title: 'Asd',
+            message: 'Fgh',
+            sound: true
+        });
     }
 
     render() {

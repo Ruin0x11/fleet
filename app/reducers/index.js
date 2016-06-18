@@ -2,7 +2,6 @@ import { combineReducers } from 'redux';
 import { routerReducer as routing } from 'react-router-redux';
 import portReducer from './port';
 import shipInfoReducer from './shipInfo';
-import sortieReducer from './sortie';
 
 const rootReducer = combineReducers({
     shipInfo: shipInfoReducer,

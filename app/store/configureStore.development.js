@@ -7,10 +7,6 @@ import { routerMiddleware } from 'react-router-redux';
 import rootReducer from '../reducers';
 import DevTools from '../containers/DevTools';
 
-import { port_update } from '../actions/port';
-import { ship_info_update } from '../actions/shipInfo';
-import { sortie_update } from '../actions/sortie';
-
 const logger = createLogger({
     level: 'info',
     collapsed: true,

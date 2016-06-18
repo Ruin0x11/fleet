@@ -12,20 +12,8 @@ export const dockInfoPropTypes = {
     maxEquip: PropTypes.number.isRequired,
 }
 
-export default class FleetHeader extends Component {
+export default class DockInfo extends Component {
     static propTypes = {
-    }
-
-    getDefaultProps () {
-        return {
-            nickname: "",
-            comment: "",
-            level: -1,
-            rank: -1,
-            numChara: -1,
-            maxChara: -1,
-            maxEquip: -1
-        };
     }
 
     constructor(props) {

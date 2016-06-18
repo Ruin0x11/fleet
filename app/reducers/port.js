@@ -131,7 +131,6 @@ function getRaigekiDamage(data) {
 }
 
 function updateGainedExperience(state, data) {
-    const gainedPlayerExp = data.api_get_exp;
     var gainedShipExp = data.api_get_ship_exp;
     var shipIds = data.api_ship_id;
     const shipExpTables = data.api_get_exp_lvup;
@@ -165,7 +164,13 @@ function updateGainedExperience(state, data) {
         ship.api_exp[1] = expToNext;  // exp to next level
     }
 
+    var apiBasic = state.api_basic
+    const gainedPlayerExp = data.api_get_exp;
+    var currentPlayerExp = data.api_member_exp + gainedPlayerExp;
+    apiBasic.api_experience = currentPlayerExp;
+
     return Object.assign({}, state, {
-        api_ship: shipList
+        api_ship: shipList,
+        api_basic: apiBasic
     })
 }
