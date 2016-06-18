@@ -91,6 +91,8 @@ function getConditionFromResult(data) {
             gainedCondition = 0;
     }
 
+    var conditionArray = getInitializedArray(gainedCondition);
+
     // flagship
     if(data.api_win_rank != "D" && data.api_win_rank != "E") {
         conditionArray[0] += 3;
@@ -98,6 +100,7 @@ function getConditionFromResult(data) {
 
     // arrays are 1-indexed
     conditionArray[data.api_mvp-1] += 10
+            console.log(conditionArray)
 
     return conditionArray;
 }
@@ -166,6 +169,9 @@ function getOpeningDamage(data) {
 }
 
 function getSingleHougekiDamage(hougeki) {
+    if(!hougeki) {
+        return getInitializedArray(0);
+    }
     var df_list = hougeki.api_df_list;
     var damage = hougeki.api_damage;
 

@@ -71,7 +71,6 @@ export const getDeckList = createSelector(
     getShipList,
     getShipInfoList,
     (apiDeckList, shipList, shipInfoList) => {
-        console.log(shipList)
         return apiDeckList.map(deck => getDeck(deck, shipList, shipInfoList))
     }
 )
