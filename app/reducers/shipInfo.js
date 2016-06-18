@@ -1,8 +1,6 @@
 import { SHIP_INFO_UPDATE } from '../actions/shipInfo';
 
-const initialState = {
-    shipInfo: {}
-}
+const initialState = {}
 
 function getShipInfo(ship) {
     return {

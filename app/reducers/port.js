@@ -1,17 +1,26 @@
 import { PORT_UPDATE } from '../actions/port';
 import { SORTIE_UPDATE } from '../actions/sortie';
+import { BATTLE_RESULT_UPDATE } from '../actions/battleResult';
 
 const initialState = {}
 
 export default function portReducer(state = initialState, action) {
     switch (action.type) {
-    case PORT_UPDATE:
-        return action.data.api_data;
-    case SORTIE_UPDATE:
-        return updateFleetDamage(state, action.data.api_data);
-    default:
-        return state;
+        case PORT_UPDATE:
+            return action.data.api_data;
+        case SORTIE_UPDATE:
+            return updateFleetDamage(state, action.data.api_data);
+        case BATTLE_RESULT_UPDATE:
+            return updateGainedExperience(state, action.data.api_data)
+        default:
+            return state;
     }
+}
+
+function getShip(shipList, index) {
+    return shipList.find(function (d) {
+        return d.api_id === index;
+    });
 }
 
 function updateFleetDamage(state, data) {
@@ -22,10 +31,8 @@ function updateFleetDamage(state, data) {
     var damage = getShipDamage(data);
 
     for(var i = 0, len = fleet.length; i < len; i++) {
-        shipList.find(function (d) {
-            return d.api_id === fleet[i];
-        }).api_nowhp -= damage[i];
-        console.log(damage)
+        var ship = getShip(shipList, fleet[i])
+        ship.api_nowhp -= damage[i];
     }
 
     return Object.assign({}, state, {
@@ -66,15 +73,15 @@ function getKoukuDamage(data) {
 }
 
 function getOpeningDamage(data) {
-    var opening_attack = data.api_opening_attack;
-    if(!opening_attack) {
+    // attack is misspelled as "atack"
+    var opening_atack = data.api_opening_atack;
+    if(!opening_atack) {
         return getBlankDamage();
     }
 
     var fdam = opening_atack.api_fdam;
     // remove leading -1
     fdam.shift();
-    console.log(fdam)
     return fdam;
 }
 
@@ -121,4 +128,44 @@ function getRaigekiDamage(data) {
     // remove leading -1
     fdam.shift();
     return fdam;
+}
+
+function updateGainedExperience(state, data) {
+    const gainedPlayerExp = data.api_get_exp;
+    var gainedShipExp = data.api_get_ship_exp;
+    var shipIds = data.api_ship_id;
+    const shipExpTables = data.api_get_exp_lvup;
+
+    gainedShipExp.shift();
+    shipIds.shift();
+
+    var shipList = state.api_ship.slice();
+
+    for(var i = 0, len = shipIds.length; i < len; i++) {
+        var ship = getShip(shipList, shipIds[i])
+        if(typeof(ship) == 'undefined') {
+            continue;
+        }
+        var expTable = shipExpTables[i];
+        var gainedExp = gainedShipExp[i];
+        // the first entry in each table is the ship's current experience.
+        // the second entry is the experience level where a level up occurs.
+        // if a level up occurs by adding the gained exp to current,
+        // the next experience value until level up is the next entry in the table.
+        // so, remove the amount that was reached from the 'exp to next' value
+        // until no more entries are in the table.
+        var lastMax = 0;
+        var expToNext = expTable[0] + gainedExp;
+        for(var j = 1, lenb = expTable.length; j < expTable.length; j++) {
+            expToNext -= lastMax;
+            lastMax = expTable[j];
+        }
+
+        ship.api_exp[0] += gainedExp; // total exp
+        ship.api_exp[1] = expToNext;  // exp to next level
+    }
+
+    return Object.assign({}, state, {
+        api_ship: shipList
+    })
 }

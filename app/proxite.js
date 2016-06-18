@@ -3,11 +3,6 @@ var net = require('net');
 var ProxyAgent = require('proxy-agent');
 var zlib = require('zlib');
 
-// ES6 exports are unsupported, so actions are written in ES5
-var shipInfoUpdate = require('./actions/shipInfo').ship_info_update
-var portUpdate = require('./actions/port').port_update
-var sortieUpdate = require('./actions/sortie').sortie_update
-
 var debugging = 0;
 
 var regex_hostport = /^([^:]+)(:([0-9]+))?$/;

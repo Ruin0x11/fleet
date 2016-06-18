@@ -89,7 +89,7 @@
                              "api_sortno":  1337,
                              "api_ship_id":  1,
                              "api_lv":  10,
-                             "api_exp":  [3000,   1000,   50],
+                             "api_exp":  [30000,   1200,   50],
                              "api_nowhp":  30,
                              "api_maxhp":  30,
                              "api_leng":  1,
