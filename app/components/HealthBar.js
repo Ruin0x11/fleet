@@ -1,16 +1,18 @@
-import React, { Component } from 'react';
+import React, { PropTypes, Component } from 'react';
 require('rc-progress/assets/index.css');
 var Line = require('rc-progress').Line;
 import styles from './HealthBar.css';
 
 export default class HealthBar extends Component {
     static propTypes = {
-        percent: React.PropTypes.number.isRequired,
-        color: React.PropTypes.string
+        percent: PropTypes.number.isRequired,
+        width: PropTypes.number,
+        color: PropTypes.string
     };
 
     static defaultProps = {
         percent: 0,
+        width: 6,
         color: "#3FC7FA"
     };
 
@@ -66,7 +68,7 @@ export default class HealthBar extends Component {
                 <span className={styles.segment}/>
                 <span className={styles.segment}/>
                 </div>
-                <Line percent={percent} strokeWidth="4" strokeColor={color}/>
+                <Line percent={percent} strokeWidth={this.props.width} strokeColor={color}/>
                 </div>
         );
     }

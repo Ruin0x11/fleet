@@ -22,7 +22,6 @@ store.dispatch(port_update(parsedJSON));
 parsedJSON = require('./battle3.json');
 store.dispatch(sortie_update(parsedJSON));
 
-
 ipcRenderer.on('dispatch', (_, arg) => {
     switch(arg.type) {
         case 'shipInfo':
@@ -31,7 +30,7 @@ ipcRenderer.on('dispatch', (_, arg) => {
         case 'port':
             store.dispatch(port_update(arg.data));
             break;
-        case 'port':
+        case 'sortie':
             store.dispatch(sortie_update(arg.data));
             break;
         default:

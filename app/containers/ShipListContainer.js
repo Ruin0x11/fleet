@@ -8,6 +8,7 @@ import { getDeckList } from '../selectors/port';
 function mapStateToProps (state) {
     if(!state.portData.api_deck_port) {
         return {
+            decks: [],
             currentDeck: -1
         };
     }

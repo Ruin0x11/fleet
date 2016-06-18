@@ -52,7 +52,11 @@ export default class Ship extends Component {
             <HealthBar percent={(this.props.nowHp/this.props.maxHp) * 100} />
             <small>{this.props.nowHp} / {this.props.maxHp}</small>
           </td>
-          <td>{this.props.cond}
+          <td>
+            <span className={styles.desc}>
+              CND
+            </span>
+            {this.props.cond}
             <div style= {{ background: this.getConditionColor(this.props.cond)}}
                  className={styles.condition}>
             </div>

@@ -1,0 +1,8 @@
+{"api_result":1,
+ "api_result_msg":"\u6210\u529f",
+ "api_data":
+ {"api_mst_ship":[{"api_id":1,
+		   "api_name":"\u7766\u6708",
+		   "api_fuel_max":15,
+		   "api_bull_max":15}],
+  "api_register_status":0}}

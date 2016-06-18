@@ -6,7 +6,15 @@ import { getPlayerData } from '../selectors/port';
 
 function mapStateToProps (state) {
     if(!state.portData.api_basic) {
-        return {};
+        return {
+            nickname: '',
+            comment: '',
+            level: 0,
+            rank: 0,
+            numChara: 0,
+            maxChara: 0,
+            maxEquip: 0,
+        };
     }
     return getPlayerData(state);
 }
