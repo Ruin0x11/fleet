@@ -1,8 +1,9 @@
 import { expect } from 'chai';
 import messageReducer from '../../app/reducers/message';
 import portReducer from '../../app/reducers/port';
-import { SORTIE_UPDATE } from '../../app/actions/sortie';
 import { PORT_UPDATE } from '../../app/actions/port';
+import { SORTIE_UPDATE } from '../../app/actions/sortie';
+import { BATTLE_RESULT_UPDATE } from '../../app/actions/battleResult';
 
 function setup() {
     const portData = require('../mocks/portDataMock.json');
@@ -10,18 +11,20 @@ function setup() {
     const sortieEnemyRemains = require('../mocks/sortieEnemyRemains.json')
     const sortieHeavilyDamaged = require('../mocks/sortieHeavilyDamaged.json')
     const sortieAllEnemiesDestroyed = require('../mocks/sortieAllEnemiesDestroyed.json')
+    const battleResultData = require('../mocks/battleResultDataMock.json')
     return {
         state,
         sortieAllEnemiesDestroyed,
         sortieEnemyRemains,
-        sortieHeavilyDamaged
+        sortieHeavilyDamaged,
+        battleResultData
     };
 }
 
 describe('reducers', () => {
     describe('messageReducer', () => {
         it('should handle initial state', () => {
-            expect(messageReducer(undefined, {})).to.eql({});
+            expect(messageReducer(undefined, {})).to.eql({ message: "" });
         });
 
         it('notifies when all enemies are destroyed', () => {
@@ -43,6 +46,14 @@ describe('reducers', () => {
             var result = messageReducer(state, { type: SORTIE_UPDATE,
                                                  data: sortieHeavilyDamaged })
             expect(result.message).to.eql("One or more ships heavily damaged. Return immediately!")
+        });
+
+        it('notifies when a ship is obtained', () => {
+            const { state, battleResultData } = setup();
+            var result = messageReducer(state, { type: BATTLE_RESULT_UPDATE,
+                                                 data: battleResultData })
+            expect(result.message).to.include("Obtained ship")
+            expect(result.message).to.include("霞")
         });
 
         it('should handle unknown action type', () => {

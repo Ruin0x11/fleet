@@ -29,8 +29,6 @@ export default class Notifier extends Component {
         this.state = {
             isActive: this.props.message == "" ? false : true
         }
-
-        this.desktopNotify()
     }
 
     style() {
@@ -66,14 +64,6 @@ export default class Notifier extends Component {
         this.setState({
             isActive: !this.state.isActive
         })
-    }
-
-    desktopNotify() {
-        notifier.notify({
-            title: 'Asd',
-            message: 'Fgh',
-            sound: true
-        });
     }
 
     render() {

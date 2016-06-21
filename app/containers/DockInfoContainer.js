@@ -5,10 +5,13 @@ import DockInfo from '../components/DockInfo';
 import { getDockInfo } from '../selectors/port';
 
 function mapStateToProps (state) {
-    if(!state.portData.api_ndock) {
-        return {};
+    if(!state.portData) {
+        return { docks: [], missions: [] };
     }
-    return {};
+    return {
+        docks: getDockInfo(state),
+        missions: []
+    };
 }
 
 const DockInfoContainer = React.createClass({

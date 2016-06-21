@@ -17,7 +17,7 @@ export default class Ship extends Component {
         var g, b;
         if(condition > 50) {
             g = 255;
-            b = Math.floor(255 * ((50 - condition % 50) / 50));
+            b = 255 - Math.floor(255 * ((50 - condition % 50) / 50));
         }
         else {
             g = Math.floor(255 * (condition / 50));

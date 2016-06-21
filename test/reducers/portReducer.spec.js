@@ -6,7 +6,7 @@ import { BATTLE_RESULT_UPDATE } from '../../app/actions/battleResult';
 
 function setup() {
     const portData = require('../mocks/portDataMock.json');
-    const sortieData = require('../mocks/sortieDataMock.json')
+    const sortieData = require('../mocks/sortieEnemyRemains.json')
     const battleResultData = require('../mocks/battleResultDataMock.json')
     return {
         portData,

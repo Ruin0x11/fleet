@@ -3,7 +3,29 @@ import { createSelector } from 'reselect'
 const getApiDeckList = (state) => state.portData.api_deck_port
 const getApiShipList = (state) => state.portData.api_ship
 const getApiBasicData = (state) => state.portData.api_basic
-const getShipInfoList = (state) => state.shipInfo
+const getApiNdockData = (state) => state.portData.api_ndock
+const getShipInfo = (state) => state.shipInfo
+
+const getDock = (dock, shipInfo) => {
+    var shipName = "None";
+    if(dock.api_ship_id > 0) {
+        shipName = shipInfo[dock.api_ship_id].api_name
+    }
+    return {
+        id: dock.api_id,
+        shipName: shipName,
+        state: dock.api_state,
+        completeTime: dock.api_complete_time
+    }
+}
+
+export const getDockInfo = createSelector(
+    getApiNdockData,
+    getShipInfo,
+    (apiNdockData, shipInfo) => {
+        return apiNdockData.map(dock => getDock(dock, shipInfo))
+    }
+)
 
 export const getPlayerData = createSelector(
     getApiBasicData,
@@ -57,11 +79,11 @@ const getShipList = createSelector(
     }
 )
 
-const getDeck = (deck, shipList, shipInfoList) => {
+const getDeck = (deck, shipList, shipInfo) => {
     return {
         id: deck.api_id,
         name: deck.api_name,
-        ships: deck.api_ship.map(id => getShip(id, shipList, shipInfoList)).filter(n => true), //remove empty ship slots
+        ships: deck.api_ship.map(id => getShip(id, shipList, shipInfo)).filter(n => true), //remove empty ship slots
         missions: deck.api_mission
     }
 }
@@ -69,8 +91,8 @@ const getDeck = (deck, shipList, shipInfoList) => {
 export const getDeckList = createSelector(
     getApiDeckList,
     getShipList,
-    getShipInfoList,
-    (apiDeckList, shipList, shipInfoList) => {
-        return apiDeckList.map(deck => getDeck(deck, shipList, shipInfoList))
+    getShipInfo,
+    (apiDeckList, shipList, shipInfo) => {
+        return apiDeckList.map(deck => getDeck(deck, shipList, shipInfo))
     }
 )

@@ -1,13 +1,19 @@
+import { PORT_UPDATE } from '../actions/port';
 import { SORTIE_UPDATE } from '../actions/sortie';
+import { BATTLE_RESULT_UPDATE } from '../actions/battleResult';
 
 import { getShipDamage } from './shared/sortie'
 
-const initialState = {}
+const initialState = { message: "" }
 
 export default function messageReducer(state = initialState, action) {
     switch (action.type) {
+        case PORT_UPDATE:
+            return { message: "" }
         case SORTIE_UPDATE:
             return reportSortie(action.data.api_data);
+        case BATTLE_RESULT_UPDATE:
+            return reportBattleResult(action.data.api_data)
         default:
             return state;
     }
@@ -29,7 +35,7 @@ function reportSortie(data) {
     for(var i in friendlyDamage) {
         if(friendlyHps[i] - friendlyDamage[i] <= Math.ceil(friendlyMaxHps[i] * 0.25)) {
             return {
-                message: "One or more ships heavily damaged. Return immediately."
+                message: "One or more ships heavily damaged. Return immediately!"
             }
         }
     }
@@ -45,6 +51,22 @@ function reportSortie(data) {
         color = "#009ACD"
     } else {
         message = enemiesLeft + " enemies still remain. Waiting for night battle/retreat."
+    }
+
+    return {
+        message: message,
+        color: color
+    }
+}
+function reportBattleResult(data) {
+    var color = "#009ACD"
+    var winRank = data.api_win_rank;
+    var getShip = data.api_get_ship;
+    var message = "Rank: " + winRank + ".";
+
+    if(getShip) {
+        message = message + " Obtained ship: " + getShip.api_ship_name + " (" + getShip.api_ship_type + ")"
+        color = "#EEC900"
     }
 
     return {
