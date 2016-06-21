@@ -15,7 +15,8 @@ const getDock = (dock, shipInfo) => {
         id: dock.api_id,
         shipName: shipName,
         state: dock.api_state,
-        completeTime: dock.api_complete_time
+        // convert UNIX timestamp to milliseconds
+        completionDate: new Date(Date.now (dock.api_complete_time * 1000))
     }
 }
 
@@ -79,12 +80,27 @@ const getShipList = createSelector(
     }
 )
 
+const getDeckDateWhenReady = (ships) => {
+    var lowestCond = ships.reduce((lowest, ship) => {
+        return ship.cond < lowest ? ship.cond : lowest;
+    });
+
+    var minutesRemaining = Math.ceil((49 - lowestCond)/3);
+    var dateNow = new Date();
+    var dateWhenReady = new Date(dateNow);
+    dateWhenReady.setMinutes(dateNow.getMinutes() + minutesRemaining)
+    return dateWhenReady
+}
+
 const getDeck = (deck, shipList, shipInfo) => {
+    //remove empty ship slots
+    var ships = deck.api_ship.map(id => getShip(id, shipList, shipInfo)).filter(n => true)
     return {
         id: deck.api_id,
         name: deck.api_name,
-        ships: deck.api_ship.map(id => getShip(id, shipList, shipInfo)).filter(n => true), //remove empty ship slots
-        missions: deck.api_mission
+        ships: ships,
+        missions: deck.api_mission,
+        dateWhenReady: getDeckDateWhenReady(ships)
     }
 }
 

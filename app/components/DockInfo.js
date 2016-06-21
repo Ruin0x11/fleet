@@ -7,12 +7,12 @@ const dockPropTypes = {
     id: PropTypes.number.isRequired,
     shipName: PropTypes.string.isRequired,
     state: PropTypes.number.isRequired,
-    completeTime: PropTypes.number.isRequired
+    completionDate: PropTypes.instanceOf(Date)
 }
 
 const missionPropTypes = {
     id: PropTypes.number.isRequired,
-    completeTime: PropTypes.number.isRequired,
+    completionDate: PropTypes.instanceOf(Date),
     deckName: PropTypes.string.isRequired
 }
 
@@ -26,19 +26,21 @@ export default class DockInfo extends Component {
         }))
     }
 
-    renderDock(dock) {
+    renderDock(dock, index) {
         if(dock.state == -1) {
-            return (<li>Dock {dock.id}: Locked</li>)
+            return (<li key={index}>Dock {dock.id}: Locked</li>)
         }
         if(dock.state == 0) {
-            return (<li>Dock {dock.id}: None</li>)
+            return (<li key={index}>Dock {dock.id}: None</li>)
         }
 
         return (
-            <li>Dock {dock.id}: {dock.shipName}
-            <Timer timestamp={dock.completeTime}
+            <li key={index}>Dock {dock.id}: {dock.shipName}
+            <Timer key={index}
+                   completionMessage={"Ready!"}
+                   completionDate={dock.completionDate}
                    notification={{ title: "Repair finished",
-                                   body: dock.shipName + " is ready."}}/>
+                                   body: dock.shipName + " was repaired."}}/>
             </li>
         )
     }
@@ -47,9 +49,9 @@ export default class DockInfo extends Component {
         console.log(this.props)
         return (
             <div className={styles.header}>
+              <h3>Docks</h3>
               <ul>
-                <h3>Docks</h3>
-                {this.props.docks.map(dock => this.renderDock(dock))}
+                {this.props.docks.map((dock, i) => this.renderDock(dock, i))}
               </ul>
               <ul>
                 <h3>Missions</h3>

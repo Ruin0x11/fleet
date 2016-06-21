@@ -10,10 +10,10 @@
   display: inline-block;
   width: 25%;
   height: 2em;
-  line-height: 1em;
+  line-height: .8em;
 }
 .labels li a {
-  padding: 8px 8px;
+  padding: 4px 6px;
   display: block;
   color: #444;
   text-decoration: none;

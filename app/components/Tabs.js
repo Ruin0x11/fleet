@@ -65,7 +65,7 @@ export default class Tabs extends Component {
 
 export class Pane extends Component {
     static propTypes = {
-        label: React.PropTypes.string.isRequired,
+        label: React.PropTypes.element.isRequired,
         children: React.PropTypes.element.isRequired
     }
 

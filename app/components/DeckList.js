@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import Deck from './Deck'
 import Tabs, { Pane } from './Tabs'
 import styles from './DeckList.css'
+import Timer from './Timer'
 
 export const shipPropTypes = {
     id: PropTypes.number.isRequired,
@@ -28,6 +29,7 @@ export const deckPropTypes = {
         ...shipPropTypes
     })).isRequired,
     missions: PropTypes.array.isRequired,
+    dateWhenReady: PropTypes.instanceOf(Date)
 }
 
 
@@ -51,18 +53,26 @@ export default class DeckList extends Component {
 
         return (
             <div>
-            <Tabs selected={0}>
-            {this.props.decks.map(function(deck) {
-                return (
-                    <Pane
-                        label={deck.name}
-                        key={deck.id}
-                    >
-                      <Deck key={deck.id} {...deck}/>
-                    </Pane>
-                );
-            }.bind(this))}
-            </Tabs>
+              <Tabs selected={0}>
+                {this.props.decks.map(function(deck) {
+                     return (
+                         <Pane
+                             label={<div>
+                           <div>{deck.name}</div>
+                           <div style={{ fontSize: "11px" }}>
+                             <Timer completionDate={new Date(Date.now() + 5000)}
+                                    completionMessage={"Ready"}
+                                    notification={{ title: "Ready to Sortie",
+                                                    body: deck.name + " can sortie again."}}/>
+                           </div>
+                             </div>}
+                             key={deck.id}
+                         >
+                             <Deck key={deck.id} {...deck}/>
+                         </Pane>
+                     );
+                 }.bind(this))}
+              </Tabs>
             </div>
         )
     }
