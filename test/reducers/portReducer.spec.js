@@ -61,7 +61,7 @@ describe('reducers', () => {
             // gained 540 experience, level up was at 1500
             expect(ships[0].api_exp[0]).to.equal(30540);
             expect(ships[0].api_exp[1]).to.equal(240);
-            // gained 100 experience
+            // gained 100 player experience
             expect(playerExp).to.equal(50100);
             // gained 17 condition (S rank, flagship was MVP)
             expect(ships[0].api_cond).to.equal(97)
@@ -70,7 +70,7 @@ describe('reducers', () => {
             ships = result.api_ship
             playerExp = state.api_basic.api_experience
 
-            // condition max is 100
+            // max condition is 100
             expect(ships[0].api_cond).to.equal(100);
         });
 

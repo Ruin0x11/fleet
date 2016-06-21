@@ -4,8 +4,6 @@
     <meta charset="utf-8">
     <title>Fleet</title>
     <script>window.$ = window.jQuery = require('./scripts/jquery-3.0.0.js');</script>
-    <!-- <link rel="stylesheet" href="../node_modules/font-awesome/css/font-awesome.min.css" />
-         <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css"> -->
     <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 
     <script>
@@ -79,7 +77,6 @@
              webview.insertCSS("body{ overflow:hidden; margin:0; }")
              if (!did && webview.getTitle().indexOf("艦隊これくしょん -艦これ- - オンラインゲーム - DMM.com") > -1) {
                  did = true;
-                 console.log('asd')
                  webview.send('ping');
              }
          };

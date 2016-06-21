@@ -2,6 +2,9 @@ import { PORT_UPDATE } from '../actions/port';
 import { SORTIE_UPDATE } from '../actions/sortie';
 import { BATTLE_RESULT_UPDATE } from '../actions/battleResult';
 
+import { getShipDamage } from './shared/sortie'
+import { getInitializedArray } from './shared/general'
+
 const initialState = {}
 
 export default function portReducer(state = initialState, action) {
@@ -43,7 +46,6 @@ function updateCondition(state, data, func) {
     for(var i = 0, len = fleet.length; i < len; i++) {
         var ship = getShip(shipList, fleet[i])
         ship.api_cond += conditionChange[i];
-        console.log(ship.api_cond)
         if(ship.api_cond > 100) {
             ship.api_cond = 100;
         }
@@ -100,7 +102,6 @@ function getConditionFromResult(data) {
 
     // arrays are 1-indexed
     conditionArray[data.api_mvp-1] += 10
-            console.log(conditionArray)
 
     return conditionArray;
 }
@@ -109,10 +110,11 @@ function updateFleetDamage(state, data) {
     var fleet = state.api_deck_port[0].api_ship;
     var shipList = state.api_ship.slice();
     var damage = getShipDamage(data);
+    var nowHps = data.api_nowhps.slice(1,7);
 
     for(var i = 0, len = fleet.length; i < len; i++) {
         var ship = getShip(shipList, fleet[i])
-        ship.api_nowhp -= damage[i];
+        ship.api_nowhp = nowHps[i] - damage[i];
         if(ship.api_nowhp < 0) {
             ship.api_nowhp = 0;
         }
@@ -121,99 +123,6 @@ function updateFleetDamage(state, data) {
     return Object.assign({}, state, {
         api_ship: shipList
     });
-}
-
-function getShipDamage(data) {
-    var shipDamage = getInitializedArray(0);
-    shipDamage = mergeDamages(shipDamage, getKoukuDamage(data));
-    shipDamage = mergeDamages(shipDamage, getOpeningDamage(data));
-    shipDamage = mergeDamages(shipDamage, getHougekiDamage(data));
-    shipDamage = mergeDamages(shipDamage, getRaigekiDamage(data));
-
-    return shipDamage;
-}
-
-function mergeDamages(damageA, damageB) {
-    return damageA.map(function (damage, i) {
-        return damageB[i] + damage;
-    });
-}
-
-function getInitializedArray(value) {
-    // initialize array to 'value' for all 6 ships
-    return Array.apply(null, Array(6)).map(Number.prototype.valueOf,value);
-}
-
-function getKoukuDamage(data) {
-    var kouku = data.api_kouku;
-    if(!kouku) {
-        return getInitializedArray(0);
-    }
-    var fdam = kouku.api_stage3.api_fdam;
-    // remove leading -1
-    fdam.shift();
-    return fdam;
-}
-
-function getOpeningDamage(data) {
-    // attack is misspelled as "atack"
-    var opening_atack = data.api_opening_atack;
-    if(!opening_atack) {
-        return getInitializedArray(0);
-    }
-
-    var fdam = opening_atack.api_fdam;
-    // remove leading -1
-    fdam.shift();
-    return fdam;
-}
-
-function getSingleHougekiDamage(hougeki) {
-    if(!hougeki) {
-        return getInitializedArray(0);
-    }
-    var df_list = hougeki.api_df_list;
-    var damage = hougeki.api_damage;
-
-    var shipDamage = getInitializedArray(0);
-    for (var i = 0, len = df_list.length; i < len; i++) {
-        // TODO: find case with multiple damages in single attack
-        var target = df_list[i][0];
-        var targetDamage = damage[i][0]
-        // 7 or greater = enemy ship
-        if(target < 7) {
-            // the arrays are 1-indexed, so subtract 1
-            shipDamage[target-1] += targetDamage;
-        }
-    }
-
-    return shipDamage
-}
-
-function getHougekiDamage(data) {
-    var shipDamage = getInitializedArray(0);
-
-    var stages = ["api_hougeki1", "api_hougeki2", "api_hougeki3"]
-
-    for(var i = 0, len = stages.length; i < len; i++) {
-        if(data[stages[i]]) {
-            var currentDamage = getSingleHougekiDamage(data[stages[i]])
-            shipDamage = mergeDamages(shipDamage, currentDamage)
-        }
-    }
-    return shipDamage;
-}
-
-function getRaigekiDamage(data) {
-    var raigeki = data.api_raigeki;
-    if(!raigeki) {
-        return getInitializedArray(0);
-    }
-
-    var fdam = raigeki.api_fdam;
-    // remove leading -1
-    fdam.shift();
-    return fdam;
 }
 
 function updateGainedExperience(state, data) {

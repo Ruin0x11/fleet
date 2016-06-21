@@ -2,27 +2,40 @@ import React, { PropTypes, Component } from 'react';
 import { Link } from 'react-router';
 import styles from './Notifier.css';
 import { Notification } from 'react-notification';
-const notifier = require('node-notifier');
+var notifier = require('node-notifier');
+// String
+notifier.notify('Message');
+
+// Object
+notifier.notify({
+  'title': 'My notification',
+  'message': 'Hello, there!'
+});
 
 export default class Notifier extends Component {
     static propTypes = {
-        message: PropTypes.string.isRequired
+        message: PropTypes.string.isRequired,
+        color: PropTypes.string
     }
+
+    static defaultProps = {
+        message: "",
+        color: "#CC1B00"
+    };
 
     constructor(props) {
         super(props);
 
         this.state = {
-            isActive: false
+            isActive: this.props.message == "" ? false : true
         }
 
-        setTimeout(this.desktopNotify, 400);
-        setTimeout(this.desktopNotify, 700);
+        this.desktopNotify()
     }
 
     style() {
         return {
-            'maxReight': '0em',
+            'maxHeight': '0em',
             'overflowY': 'hidden',
             'position': 'relative',
             'bottom': '0em',
@@ -30,7 +43,7 @@ export default class Notifier extends Component {
             'paddingTop': '0em',
             'paddingBottom': '0em',
             'paddingLeft': '.5em',
-            'background': '#Cc1b00',
+            'background': this.props.color,
             'borderRadius': '0px',
             'fontSize': '.9em',
             'WebKittransition': '.5s cubic-bezier(0, 1, 0.5, 1)',
@@ -43,8 +56,8 @@ export default class Notifier extends Component {
 
     activeStyle() {
         return Object.assign({}, this.style(), {
-            'max-height': '2em',
-            'padding-top': '.5em',
+            'maxHeight': '2em',
+            'paddingTop': '.5em',
             'height': '2em'
         })
     }
@@ -74,7 +87,7 @@ export default class Notifier extends Component {
             message={this.props.message}
             dismissAfter={2000}
             onDismiss={this.toggleNotification.bind(this)}
-            onClick={() =>  this.setState({ isActive: false })}
+            onClick={() => this.setState({ isActive: false })}
                 />
                 </div>
         );

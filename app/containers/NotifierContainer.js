@@ -4,8 +4,14 @@ import { connect } from 'react-redux';
 import Notifier from '../components/Notifier'
 
 function mapStateToProps (state) {
+    if(!state.messageData.message) {
+        return {
+            message: ""
+        }
+    }
     return {
-        message: "Teitoku!"
+        message: state.messageData.message,
+        color: state.messageData.color
     };
 }
 

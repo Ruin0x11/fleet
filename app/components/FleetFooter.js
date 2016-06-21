@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 import styles from './FleetFooter.css';
-import ShipListContainer from '../containers/ShipListContainer';
+import DeckListContainer from '../containers/DeckListContainer';
 import NotifierContainer from '../containers/NotifierContainer';
 
 export default class FleetFooter extends Component {

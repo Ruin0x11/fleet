@@ -2,7 +2,7 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Home from '../components/Home';
-import ShipList from '../components/ShipList';
+import DeckList from '../components/DeckList';
 import { getDeckList } from '../selectors/port';
 
 function mapStateToProps (state) {
@@ -18,11 +18,11 @@ function mapStateToProps (state) {
     };
 }
 
-const ShipListContainer = React.createClass({
+const DeckListContainer = React.createClass({
     render() {
-        return <ShipList {...this.props} />;
+        return <DeckList {...this.props} />;
     }
 });
 
-export default connect(mapStateToProps)(ShipListContainer);
+export default connect(mapStateToProps)(DeckListContainer);
 

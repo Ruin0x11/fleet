@@ -1,8 +1,8 @@
 import React, { PropTypes, Component } from 'react';
 import { Link } from 'react-router';
-import styles from './ShipList.css';
-import HealthBar from './HealthBar';
-import Ship from './Ship';
+import Deck from './Deck'
+import Tabs, { Pane } from './Tabs'
+import styles from './DeckList.css'
 
 export const shipPropTypes = {
     id: PropTypes.number.isRequired,
@@ -31,7 +31,7 @@ export const deckPropTypes = {
 }
 
 
-export default class ShipList extends Component {
+export default class DeckList extends Component {
     static propTypes = {
         decks: PropTypes.arrayOf(PropTypes.shape({
             ...deckPropTypes
@@ -47,13 +47,24 @@ export default class ShipList extends Component {
         if(this.props.currentDeck == -1) {
             return (<div></div>);
         }
-        var ships = this.props.decks[this.props.currentDeck].ships;
+        var deck = this.props.decks[this.props.currentDeck].ships;
+
         return (
-            <table className={styles.container}>
-              <tbody>{ships.map(ship => <Ship key={ship.id} {...ship}/>)}
-              </tbody>
-            </table>
-        );
+            <div>
+            <Tabs selected={0}>
+            {this.props.decks.map(function(deck) {
+                return (
+                    <Pane
+                        label={deck.name}
+                        key={deck.id}
+                    >
+                      <Deck key={deck.id} {...deck}/>
+                    </Pane>
+                );
+            }.bind(this))}
+            </Tabs>
+            </div>
+        )
     }
 }
 

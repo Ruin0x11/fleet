@@ -19,8 +19,12 @@ var ipcs = new IPCStream('file');
 
 const {ipcRenderer} = require('electron');
 
-function getSvdata(response) {
+function decompress(response) {
     var data = zlib.gunzipSync(response).toString();
+    return getSvdata(data);
+}
+
+function getSvdata(response) {
     // return the JSON after "svdata="
     var jsonString = data.substring(data.indexOf("svdata=")+7, data.length);
     return JSON.parse(jsonString);
@@ -35,28 +39,34 @@ function writeResponse(url, response) {
     console.log("Saved ".concat(filename));
 }
 
-function dispatch(type, response) {
+function dispatch(type, response, isGzipped) {
+    var data;
+    if(isGzipped) {
+        data = decompress(response);
+    } else {
+        data = getSvdata(response)
+    }
     ipcRenderer.send('dispatch',
                      {
                          type: type,
-                         data: getSvdata(response)
+                         data: data
                      });
 }
 
 function dispatchShipInfo(response) {
-    dispatch('shipInfo', response)
+    dispatch('shipInfo', response, true)
 }
 
 function dispatchPort(response) {
-    dispatch('port', response)
+    dispatch('port', response, true)
 }
 
 function dispatchSortie(response) {
-    dispatch('sortie', response)
+    dispatch('sortie', response, true)
 }
 
 function dispatchBattleResult(response) {
-    dispatch('battleResult', response)
+    dispatch('battleResult', response, false)
 }
 
 router.addRoute('/kcsapi/api_start2', dispatchShipInfo);
@@ -160,9 +170,11 @@ function httpUserRequest( userRequest, userResponse ) {
                     }
                     userResponse.end();
 
+                    console.log(path)
+
                     var args = router.match(path);
                     if(args) {
-                        console.log(path)
+                        console.log("hit")
                         args.action(buf)
                     }
                 }

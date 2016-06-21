@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 import styles from './FleetBody.css';
-import ShipListContainer from '../containers/ShipListContainer';
+import DeckListContainer from '../containers/DeckListContainer';
 import NotifierContainer from '../containers/NotifierContainer';
 import DockInfoContainer from '../containers/DockInfoContainer';
 import FleetTabs from './FleetTabs';
@@ -16,7 +16,7 @@ export default class FleetBody extends Component {
                 <div className={styles.mainarea}>
                     <div className={styles.message}>
                     <div style={{display: 'flex'}}>
-                        <ShipListContainer />
+                        <DeckListContainer />
                         <DockInfoContainer />
                     </div>
                     </div>

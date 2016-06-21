@@ -1,6 +1,6 @@
 # fleet
 
-A KanColle client written in Electron/Node.js.
+A KanColle client written with Electron, React and Redux.
 
 **Note:** No macros, packet modification, API calls, or other forms of cheating are included.
 

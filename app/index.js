@@ -20,9 +20,11 @@ var parsedJSON = require('../test/mocks/shipInfoMock.json');
 store.dispatch(ship_info_update(parsedJSON));
 parsedJSON = require('../test/mocks/portDataMock.json');
 store.dispatch(port_update(parsedJSON));
-parsedJSON = require('../test/mocks/battleResultDataMock.json');
-store.dispatch(battle_result_update(parsedJSON));
-
+/* parsedJSON = require('../test/mocks/sortieDataMock.json');
+ * store.dispatch(sortie_update(parsedJSON));
+ * parsedJSON = require('../test/mocks/battleResultDataMock.json');
+ * store.dispatch(battle_result_update(parsedJSON));
+ * */
 ipcRenderer.on('dispatch', (_, arg) => {
     console.log(arg.type)
     switch(arg.type) {

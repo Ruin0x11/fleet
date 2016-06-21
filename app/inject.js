@@ -1,14 +1,14 @@
 __fleetTools={
     getSWF: function(){
-        var p = document.querySelector('body');
-        var d = document.getElementById('area_game');
-        p.innerHTML = '';
-        p.appendChild(d);
+        var body = document.querySelector('body');
+        var gameArea = document.getElementById('area_game');
+        body.innerHTML = '';
+        body.appendChild(gameArea);
     }
 }
 
 const {ipcRenderer} = require('electron');
 ipcRenderer.on('ping', () => {
-    console.log('asd');
+    // obtain the source URL of the game's iframe and tell the host to render it
     ipcRenderer.sendToHost("src", document.getElementById("game_frame").getAttribute("src"));
 });

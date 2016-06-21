@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { Link } from 'react-router';
 import styles from './Ship.css';
-import { shipPropTypes } from './ShipList';
+import { shipPropTypes } from './DeckList';
 import HealthBar from './HealthBar';
 
 export default class Ship extends Component {
@@ -38,14 +38,10 @@ export default class Ship extends Component {
           {this.props.level}
           </td>
 
-          <td style={{ textAlign: 'right'}}>
-            <span>
+          <td style={{ width: '5em', paddingRight: '.5em'}}>
             <span className={styles.desc}>
               TNL
             </span>
-            </span>
-          </td>
-          <td>
               {this.props.nextExp}
           </td>
           <td>
