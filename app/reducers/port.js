@@ -1,5 +1,6 @@
 import { PORT_UPDATE } from '../actions/port';
 import { SORTIE_UPDATE } from '../actions/sortie';
+import { SORTIE_START_UPDATE } from '../actions/sortieStart';
 import { BATTLE_RESULT_UPDATE } from '../actions/battleResult';
 
 import { getShipDamage } from './shared/sortie'
@@ -11,6 +12,8 @@ export default function portReducer(state = initialState, action) {
     switch (action.type) {
         case PORT_UPDATE:
             return action.data.api_data;
+        case SORTIE_START_UPDATE:
+            return updateFromSortieStart(state)
         case SORTIE_UPDATE:
             return updateFromBattle(state, action.data.api_data)
         case BATTLE_RESULT_UPDATE:
@@ -26,22 +29,27 @@ function getShip(shipList, index) {
     });
 }
 
+function updateFromSortieStart(state) {
+    state = updateCondition(state, {}, getConditionFromSortieStart);
+    return state
+}
+
 function updateFromBattle(state, data) {
     state = updateFleetDamage(state, data);
-    state = updateCondition(state, data, getConditionFromBattle)
-    return state
+    state = updateCondition(state, data, getConditionFromBattle);
+    return state;
 }
 
 function updateFromResult(state, data) {
     state = updateGainedExperience(state, data);
-    state = updateCondition(state, data, getConditionFromResult)
-    return state
+    state = updateCondition(state, data, getConditionFromResult);
+    return state;
 }
 
-function updateCondition(state, data, func) {
+function updateCondition(state, apiData, conditionFunc) {
     var fleet = state.api_deck_port[0].api_ship;
     var shipList = state.api_ship.slice();
-    var conditionChange = func(data);
+    var conditionChange = conditionFunc(apiData);
 
     for(var i = 0, len = fleet.length; i < len; i++) {
         var ship = getShip(shipList, fleet[i])
@@ -57,6 +65,10 @@ function updateCondition(state, data, func) {
     return Object.assign({}, state, {
         api_ship: shipList
     })
+}
+
+function getConditionFromSortieStart(data) {
+    return getInitializedArray(-15);
 }
 
 function getConditionFromBattle(data) {

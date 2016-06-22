@@ -11,6 +11,7 @@ import { ipcRenderer } from 'electron';
 import { ship_info_update } from './actions/shipInfo';
 import { port_update } from './actions/port';
 import { sortie_update } from './actions/sortie';
+import { sortie_start_update } from './actions/sortieStart';
 import { battle_result_update } from './actions/battleResult';
 
 const store = configureStore();
@@ -20,11 +21,13 @@ var parsedJSON = require('../test/mocks/shipInfoMock.json');
 store.dispatch(ship_info_update(parsedJSON));
 parsedJSON = require('../test/mocks/portDataMock.json');
 store.dispatch(port_update(parsedJSON));
-/* parsedJSON = require('../test/mocks/sortieDataMock.json');
- * store.dispatch(sortie_update(parsedJSON));
- * parsedJSON = require('../test/mocks/battleResultDataMock.json');
- * store.dispatch(battle_result_update(parsedJSON));
- * */
+parsedJSON = require('../test/mocks/sortieStartDataMock.json');
+store.dispatch(sortie_start_update(parsedJSON));
+parsedJSON = require('../test/mocks/sortieAllEnemiesDestroyed.json');
+store.dispatch(sortie_update(parsedJSON));
+parsedJSON = require('../test/mocks/battleResultDataMock.json');
+store.dispatch(battle_result_update(parsedJSON));
+
 ipcRenderer.on('dispatch', (_, arg) => {
     console.log(arg.type)
     switch(arg.type) {
@@ -39,6 +42,9 @@ ipcRenderer.on('dispatch', (_, arg) => {
             break;
         case 'battleResult':
             store.dispatch(battle_result_update(arg.data));
+            break;
+        case 'sortieStart':
+            store.dispatch(sortie_start_update(arg.data));
             break;
         default:
             console.log(arg);

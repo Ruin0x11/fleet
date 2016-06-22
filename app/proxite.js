@@ -20,12 +20,19 @@ var ipcs = new IPCStream('file');
 const {ipcRenderer} = require('electron');
 
 function decompress(response) {
-    var data = zlib.gunzipSync(response).toString();
+    var data;
+    try {
+        var data = zlib.gunzipSync(response).toString();
+    } catch (e) {
+        // data wasn't gzipped, try as plaintext
+        return getSvdata(response.toString());
+    }
     return getSvdata(data);
 }
 
-function getSvdata(response) {
+function getSvdata(data) {
     // return the JSON after "svdata="
+    console.log(data)
     var jsonString = data.substring(data.indexOf("svdata=")+7, data.length);
     return JSON.parse(jsonString);
 }
@@ -39,34 +46,32 @@ function writeResponse(url, response) {
     console.log("Saved ".concat(filename));
 }
 
-function dispatch(type, response, isGzipped) {
-    var data;
-    if(isGzipped) {
-        data = decompress(response);
-    } else {
-        data = getSvdata(response)
-    }
+function dispatch(type, response) {
     ipcRenderer.send('dispatch',
                      {
                          type: type,
-                         data: data
+                         data: decompress(response)
                      });
 }
 
 function dispatchShipInfo(response) {
-    dispatch('shipInfo', response, true)
+    dispatch('shipInfo', response)
 }
 
 function dispatchPort(response) {
-    dispatch('port', response, true)
+    dispatch('port', response)
 }
 
 function dispatchSortie(response) {
-    dispatch('sortie', response, true)
+    dispatch('sortie', response)
 }
 
 function dispatchBattleResult(response) {
-    dispatch('battleResult', response, false)
+    dispatch('battleResult', response)
+}
+
+function dispatchSortieStart(response) {
+    dispatch('sortieStart', response)
 }
 
 router.addRoute('/kcsapi/api_start2', dispatchShipInfo);
@@ -75,6 +80,8 @@ router.addRoute('/kcsapi/api_req_sortie/battle', dispatchSortie);
 router.addRoute('/kcsapi/api_req_practice/battle', dispatchSortie);
 router.addRoute('/kcsapi/api_req_sortie/battleresult', dispatchBattleResult);
 router.addRoute('/kcsapi/api_req_practice/battleresult', dispatchBattleResult);
+router.addRoute('/kcsapi/api_req_map/start', dispatchSortieStart);
+
 
 function getHostPortFromString( hostString, defaultPort ) {
     var host = hostString;

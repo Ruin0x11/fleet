@@ -1,0 +1,18 @@
+{"api_result":1,
+        "api_result_msg":"\u6210\u529f",
+        "api_data":
+        {"api_rashin_flg":0,
+         "api_rashin_id":0,
+         "api_maparea_id":2,
+         "api_mapinfo_no":4,
+         "api_no":1,
+         "api_color_no":4,
+         "api_event_id":4,
+         "api_event_kind":1,
+         "api_next":3,
+         "api_bosscell_no":16,
+         "api_bosscomp":0,
+         "api_airsearch":
+         {"api_plane_type":0,
+          "api_result":0},
+         "api_from_no":0}}

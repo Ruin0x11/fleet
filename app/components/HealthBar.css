@@ -17,11 +17,13 @@
   width: inherit;
   display: inline-block;
   margin-top: .3em;
+  margin-left: .3em;
 }
 
 .segment {
   /* border-left: 1px solid #8D99AE; */
   border-right: 1px solid #232C39;
+  margin-left: .2em;
   width: 25%;
   height: .65em;
   float: left;

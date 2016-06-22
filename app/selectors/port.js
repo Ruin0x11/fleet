@@ -6,50 +6,7 @@ const getApiBasicData = (state) => state.portData.api_basic
 const getApiNdockData = (state) => state.portData.api_ndock
 const getShipInfo = (state) => state.shipInfo
 
-const getDock = (dock, shipInfo) => {
-    var shipName = "None";
-    if(dock.api_ship_id > 0) {
-        shipName = shipInfo[dock.api_ship_id].api_name
-    }
-    return {
-        id: dock.api_id,
-        shipName: shipName,
-        state: dock.api_state,
-        // convert UNIX timestamp to milliseconds
-        completionDate: new Date(Date.now (dock.api_complete_time * 1000))
-    }
-}
-
-export const getDockInfo = createSelector(
-    getApiNdockData,
-    getShipInfo,
-    (apiNdockData, shipInfo) => {
-        return apiNdockData.map(dock => getDock(dock, shipInfo))
-    }
-)
-
-export const getPlayerData = createSelector(
-    getApiBasicData,
-    getApiShipList,
-    (apiBasicData, apiShipList) => {
-        return {
-            nickname: apiBasicData.api_nickname,
-            comment: apiBasicData.api_comment,
-            level: apiBasicData.api_level,
-            rank: apiBasicData.api_rank,
-            experience: apiBasicData.api_experience,
-            numChara: apiShipList.length,
-            maxChara: apiBasicData.api_max_chara,
-            maxEquip: apiBasicData.api_max_slotitem,
-        }
-    }
-)
-
-const getShip = (id, ships, shipInfo) => {
-    var ship = ships[id];
-    if(id == -1) {
-        return null;
-    }
+const getShip = (ship, shipInfo) => {
     return {
         id: ship.api_id,
         ship_id: ship.api_ship_id,
@@ -70,38 +27,80 @@ const getShip = (id, ships, shipInfo) => {
 
 const getShipList = createSelector(
     getApiShipList,
-    (apiShipList) => {
+    getShipInfo,
+    (apiShipList, shipInfo) => {
         var lookup = {};
         var array = apiShipList;
         for (var i = 0, len = array.length; i < len; i++) {
-            lookup[array[i].api_id] = array[i];
+            lookup[array[i].api_id] = getShip(array[i], shipInfo);
         }
         return lookup;
+    }
+)
+
+const getDock = (dock, shipList) => {
+    var shipName = "None";
+    if(dock.api_ship_id > 0) {
+        shipName = shipList[dock.api_ship_id].name
+    }
+    return {
+        id: dock.api_id,
+        shipName: shipName,
+        state: dock.api_state,
+        // timestamp is in milliseconds already
+        completionDate: new Date(dock.api_complete_time)
+    }
+}
+
+export const getDockInfo = createSelector(
+    getApiNdockData,
+    getShipList,
+    (apiNdockData, shipList) => {
+        return apiNdockData.map(dock => getDock(dock, shipList))
+    }
+)
+
+export const getPlayerData = createSelector(
+    getApiBasicData,
+    getApiShipList,
+    (apiBasicData, apiShipList) => {
+        return {
+            nickname: apiBasicData.api_nickname,
+            comment: apiBasicData.api_comment,
+            level: apiBasicData.api_level,
+            rank: apiBasicData.api_rank,
+            experience: apiBasicData.api_experience,
+            numChara: apiShipList.length,
+            maxChara: apiBasicData.api_max_chara,
+            maxEquip: apiBasicData.api_max_slotitem,
+        }
     }
 )
 
 const getDeckDateWhenReady = (ships) => {
     var lowestCond = ships.reduce((lowest, ship) => {
         return ship.cond < lowest ? ship.cond : lowest;
-    });
+    }, 100);
 
-    var minutesRemaining = Math.ceil((49 - lowestCond)/3);
+    // condition recovery is 3 per 3 minutes, with 49 highest for natural recovery
+    var minutesRemaining = Math.ceil((49 - lowestCond)/3)*3;
     var dateNow = new Date();
     var dateWhenReady = new Date(dateNow);
     dateWhenReady.setMinutes(dateNow.getMinutes() + minutesRemaining)
     return dateWhenReady
 }
 
-const getDeck = (deck, shipList, shipInfo) => {
+const getDeck = (deck, shipList) => {
     //remove empty ship slots
-    var ships = deck.api_ship.map(id => getShip(id, shipList, shipInfo)).filter(n => true)
-    return {
+    var ships = deck.api_ship.map(id => shipList[id]).filter(n => n)
+    var a = {
         id: deck.api_id,
         name: deck.api_name,
         ships: ships,
         missions: deck.api_mission,
         dateWhenReady: getDeckDateWhenReady(ships)
     }
+    return a
 }
 
 export const getDeckList = createSelector(
@@ -109,6 +108,6 @@ export const getDeckList = createSelector(
     getShipList,
     getShipInfo,
     (apiDeckList, shipList, shipInfo) => {
-        return apiDeckList.map(deck => getDeck(deck, shipList, shipInfo))
+        return apiDeckList.map(deck => getDeck(deck, shipList))
     }
 )

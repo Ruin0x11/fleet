@@ -26,14 +26,21 @@ export default class Timer extends Component {
         }
     }
 
-
-    getTimeMessage(date) {
-        if (date <= 0) {
+    getTimeMessage(timeRemainingMillis) {
+        if (timeRemainingMillis <= 0) {
             return this.props.completionMessage;
         } else {
-            var seconds = '0' + Math.floor( (date/1000) % 60 );
-            var minutes = '0' + Math.floor( (date/1000/60) % 60 );
-            var hours = '0' + Math.floor( (date/(1000*60*60)) % 24 );
+            var msec = timeRemainingMillis
+            var hours = Math.floor(msec / 1000 / 60 / 60);
+            msec -= hours * 1000 * 60 * 60;
+            var minutes = Math.floor(msec / 1000 / 60);
+            msec -= minutes * 1000 * 60;
+            var seconds = Math.floor(msec / 1000);
+            msec -= seconds * 1000;
+
+            hours = '0' + hours
+            minutes = '0' + minutes
+            seconds = '0' + seconds
 
             // Will display time in 10:30:23 format
             var formattedTime = hours.slice(-2) + ':' + minutes.slice(-2) + ':' + seconds.slice(-2);
@@ -52,6 +59,7 @@ export default class Timer extends Component {
     componentWillReceiveProps(nextProps) {
         const remaining = nextProps.completionDate - Date.now()
         if (remaining > 0) {
+            this.setState({ finished: false })
             this.setInterval();
         }
     }

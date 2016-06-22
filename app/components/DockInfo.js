@@ -28,14 +28,23 @@ export default class DockInfo extends Component {
 
     renderDock(dock, index) {
         if(dock.state == -1) {
-            return (<li key={index}>Dock {dock.id}: Locked</li>)
+            return (<li key={index}>Dock {dock.id}:
+              <span className={styles.disabled}>
+                (Locked)
+              </span>
+            </li>)
         }
         if(dock.state == 0) {
-            return (<li key={index}>Dock {dock.id}: None</li>)
+            return (<li key={index}>Dock {dock.id}:
+              <span className={styles.disabled}>
+                (None)
+              </span>
+            </li>)
         }
 
         return (
-            <li key={index}>Dock {dock.id}: {dock.shipName}
+            <li key={index}>Dock {dock.id}:
+              <span className={styles.dockship}>{dock.shipName}</span>
             <Timer key={index}
                    completionMessage={"Ready!"}
                    completionDate={dock.completionDate}
@@ -46,7 +55,6 @@ export default class DockInfo extends Component {
     }
 
     render() {
-        console.log(this.props)
         return (
             <div className={styles.header}>
               <h3>Docks</h3>

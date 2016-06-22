@@ -9,7 +9,7 @@ const initialState = { message: "" }
 export default function messageReducer(state = initialState, action) {
     switch (action.type) {
         case PORT_UPDATE:
-            return { message: "" }
+            return { isActive: false }
         case SORTIE_UPDATE:
             return reportSortie(action.data.api_data);
         case BATTLE_RESULT_UPDATE:
@@ -55,6 +55,7 @@ function reportSortie(data) {
 
     return {
         message: message,
+        isActive: true,
         color: color
     }
 }
@@ -66,11 +67,12 @@ function reportBattleResult(data) {
 
     if(getShip) {
         message = message + " Obtained ship: " + getShip.api_ship_name + " (" + getShip.api_ship_type + ")"
-        color = "#EEC900"
+        color = "#EEB422"
     }
 
     return {
         message: message,
+        isActive: true,
         color: color
     }
 }

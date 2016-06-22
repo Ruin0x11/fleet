@@ -32,7 +32,6 @@ export const deckPropTypes = {
     dateWhenReady: PropTypes.instanceOf(Date)
 }
 
-
 export default class DeckList extends Component {
     static propTypes = {
         decks: PropTypes.arrayOf(PropTypes.shape({
@@ -49,7 +48,6 @@ export default class DeckList extends Component {
         if(this.props.currentDeck == -1) {
             return (<div></div>);
         }
-        var deck = this.props.decks[this.props.currentDeck].ships;
 
         return (
             <div>
@@ -60,7 +58,7 @@ export default class DeckList extends Component {
                              label={<div>
                            <div>{deck.name}</div>
                            <div style={{ fontSize: "11px" }}>
-                             <Timer completionDate={new Date(Date.now() + 5000)}
+                             <Timer completionDate={deck.dateWhenReady}
                                     completionMessage={"Ready"}
                                     notification={{ title: "Ready to Sortie",
                                                     body: deck.name + " can sortie again."}}/>

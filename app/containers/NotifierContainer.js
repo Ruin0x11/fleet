@@ -6,11 +6,12 @@ import Notifier from '../components/Notifier'
 function mapStateToProps (state) {
     if(!state.messageData.message) {
         return {
-            message: ""
+            isActive: false
         }
     }
     return {
         message: state.messageData.message,
+        isActive: state.messageData.isActive,
         color: state.messageData.color
     };
 }

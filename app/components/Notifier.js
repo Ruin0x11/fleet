@@ -2,24 +2,17 @@ import React, { PropTypes, Component } from 'react';
 import { Link } from 'react-router';
 import styles from './Notifier.css';
 import { Notification } from 'react-notification';
-var notifier = require('node-notifier');
-// String
-notifier.notify('Message');
-
-// Object
-notifier.notify({
-  'title': 'My notification',
-  'message': 'Hello, there!'
-});
 
 export default class Notifier extends Component {
     static propTypes = {
-        message: PropTypes.string.isRequired,
+        message: PropTypes.string,
+        isActive: PropTypes.bool,
         color: PropTypes.string
     }
 
     static defaultProps = {
         message: "",
+        isActive: true,
         color: "#CC1B00"
     };
 
@@ -27,7 +20,7 @@ export default class Notifier extends Component {
         super(props);
 
         this.state = {
-            isActive: this.props.message == "" ? false : true
+            isActive: this.props.isActive
         }
     }
 
@@ -61,6 +54,7 @@ export default class Notifier extends Component {
     }
 
     toggleNotification() {
+        console.log("die")
         this.setState({
             isActive: !this.state.isActive
         })
@@ -69,17 +63,15 @@ export default class Notifier extends Component {
     render() {
         const { isActive } = this.state;
         return (
-                <div>
                 <Notification
             isActive={this.state.isActive}
             activeBarStyle={this.activeStyle()}
             barStyle={this.style()}
             message={this.props.message}
-            dismissAfter={2000}
+            dismissAfter={200}
             onDismiss={this.toggleNotification.bind(this)}
             onClick={() => this.setState({ isActive: false })}
                 />
-                </div>
         );
     }
 }

@@ -18,7 +18,7 @@ function mergeDamages(damageA, damageB) {
 
 function getKoukuDamage(data) {
     var kouku = data.api_kouku;
-    if(!kouku) {
+    if(!kouku.api_stage3) {
         return getInitializedArray(0);
     }
     var fdam = kouku.api_stage3.api_fdam;
@@ -55,11 +55,8 @@ function getSingleHougekiDamage(hougeki) {
         // TODO: find case with multiple damages in single attack
         var target = df_list[i][0];
         var targetDamage = damage[i][0]
-        // 7 or greater = enemy ship
-        if(target < 7) {
-            // the arrays are 1-indexed, so subtract 1
-            shipDamage[target-1] += targetDamage;
-        }
+        // the arrays are 1-indexed, so subtract 1
+        shipDamage[target-1] += targetDamage;
     }
 
     return shipDamage
