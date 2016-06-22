@@ -62,8 +62,8 @@ function dispatchPort(response) {
     dispatch('port', response)
 }
 
-function dispatchSortie(response) {
-    dispatch('sortie', response)
+function dispatchBattle(response) {
+    dispatch('battle', response)
 }
 
 function dispatchBattleResult(response) {
@@ -74,14 +74,23 @@ function dispatchSortieStart(response) {
     dispatch('sortieStart', response)
 }
 
+function dispatchSortieNext(response) {
+    dispatch('sortieNext', response)
+}
+
+function dispatchDock(response) {
+    dispatch('dock', response)
+}
+
 router.addRoute('/kcsapi/api_start2', dispatchShipInfo);
 router.addRoute('/kcsapi/api_port/port', dispatchPort);
-router.addRoute('/kcsapi/api_req_sortie/battle', dispatchSortie);
-router.addRoute('/kcsapi/api_req_practice/battle', dispatchSortie);
+router.addRoute('/kcsapi/api_req_sortie/battle', dispatchBattle);
+router.addRoute('/kcsapi/api_req_practice/battle', dispatchBattle);
 router.addRoute('/kcsapi/api_req_sortie/battleresult', dispatchBattleResult);
 router.addRoute('/kcsapi/api_req_practice/battleresult', dispatchBattleResult);
 router.addRoute('/kcsapi/api_req_map/start', dispatchSortieStart);
-
+router.addRoute('/kcsapi/api_req_map/next', dispatchSortieNext);
+router.addRoute('/kcsapi/api_get_member/ndock', dispatchDock);
 
 function getHostPortFromString( hostString, defaultPort ) {
     var host = hostString;

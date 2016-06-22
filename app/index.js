@@ -10,7 +10,7 @@ import './app.global.css';
 import { ipcRenderer } from 'electron';
 import { ship_info_update } from './actions/shipInfo';
 import { port_update } from './actions/port';
-import { sortie_update } from './actions/sortie';
+import { battle_update } from './actions/sortie';
 import { sortie_start_update } from './actions/sortieStart';
 import { battle_result_update } from './actions/battleResult';
 
@@ -24,7 +24,7 @@ store.dispatch(port_update(parsedJSON));
 parsedJSON = require('../test/mocks/sortieStartDataMock.json');
 store.dispatch(sortie_start_update(parsedJSON));
 parsedJSON = require('../test/mocks/sortieAllEnemiesDestroyed.json');
-store.dispatch(sortie_update(parsedJSON));
+store.dispatch(battle_update(parsedJSON));
 parsedJSON = require('../test/mocks/battleResultDataMock.json');
 store.dispatch(battle_result_update(parsedJSON));
 
@@ -37,14 +37,20 @@ ipcRenderer.on('dispatch', (_, arg) => {
         case 'port':
             store.dispatch(port_update(arg.data));
             break;
-        case 'sortie':
-            store.dispatch(sortie_update(arg.data));
+        case 'battle':
+            store.dispatch(battle_update(arg.data));
             break;
         case 'battleResult':
             store.dispatch(battle_result_update(arg.data));
             break;
         case 'sortieStart':
             store.dispatch(sortie_start_update(arg.data));
+            break;
+        case 'sortieStart':
+            store.dispatch(sortie_next_update(arg.data));
+            break;
+        case 'dock':
+            store.dispatch(dock_update(arg.data));
             break;
         default:
             console.log(arg);

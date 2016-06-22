@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import portReducer from '../../app/reducers/port';
 import { PORT_UPDATE } from '../../app/actions/port';
-import { SORTIE_UPDATE } from '../../app/actions/sortie';
+import { BATTLE_UPDATE } from '../../app/actions/sortie';
 import { BATTLE_RESULT_UPDATE } from '../../app/actions/battleResult';
 
 function setup() {
@@ -32,13 +32,13 @@ describe('reducers', () => {
             expect(ships[0].api_cond).to.equal(80);
         });
 
-        it('should handle SORTIE_UPDATE', () => {
+        it('should handle BATTLE_UPDATE', () => {
             const { portData, sortieData } = setup();
             var state = portReducer({}, { type: PORT_UPDATE, data: portData });
             var ships = state.api_ship
             expect(ships[0].api_nowhp).to.equal(30);
             expect(ships[0].api_cond).to.equal(80);
-            var result = portReducer(state, { type: SORTIE_UPDATE, data: sortieData })
+            var result = portReducer(state, { type: BATTLE_UPDATE, data: sortieData })
             ships = result.api_ship
             // there are a total of 6 stages, each of which do 1 damage to the first ship
             expect(ships[0].api_nowhp).to.equal(24);

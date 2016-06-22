@@ -13,7 +13,7 @@ export default class Notifier extends Component {
     static defaultProps = {
         message: "",
         isActive: true,
-        color: "#CC1B00"
+        color: "#009ACD"
     };
 
     constructor(props) {

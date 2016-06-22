@@ -81,7 +81,8 @@ export default class Timer extends Component {
                 if(typeof(this.props.notification) != 'undefined') {
                     let notification = new Notification(
                         this.props.notification.title, {
-                            body: this.props.notification.body
+                            body: this.props.notification.body,
+                            silent: false
                         });
                 }
                 clearInterval(this.interval);

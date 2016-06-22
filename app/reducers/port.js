@@ -1,7 +1,8 @@
 import { PORT_UPDATE } from '../actions/port';
-import { SORTIE_UPDATE } from '../actions/sortie';
+import { BATTLE_UPDATE } from '../actions/sortie';
 import { SORTIE_START_UPDATE } from '../actions/sortieStart';
 import { BATTLE_RESULT_UPDATE } from '../actions/battleResult';
+import { DOCK_UPDATE } from '../actions/dock';
 
 import { getShipDamage } from './shared/sortie'
 import { getInitializedArray } from './shared/general'
@@ -11,13 +12,15 @@ const initialState = {}
 export default function portReducer(state = initialState, action) {
     switch (action.type) {
         case PORT_UPDATE:
-            return action.data.api_data;
+            return action.data;
+        case DOCK_UPDATE:
+            return updateDock(state, action.data)
         case SORTIE_START_UPDATE:
             return updateFromSortieStart(state)
-        case SORTIE_UPDATE:
-            return updateFromBattle(state, action.data.api_data)
+        case BATTLE_UPDATE:
+            return updateFromBattle(state, action.data)
         case BATTLE_RESULT_UPDATE:
-            return updateFromResult(state, action.data.api_data)
+            return updateFromResult(state, action.data)
         default:
             return state;
     }
@@ -27,6 +30,12 @@ function getShip(shipList, index) {
     return shipList.find(function (d) {
         return d.api_id === index;
     });
+}
+
+function updateDock(state, data) {
+    return Object.assign({}, state, {
+        api_ndock: data
+    })
 }
 
 function updateFromSortieStart(state) {

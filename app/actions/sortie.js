@@ -1,9 +1,9 @@
-export const SORTIE_UPDATE = 'SORTIE_UPDATE';
+export const BATTLE_UPDATE = 'BATTLE_UPDATE';
 
-export function sortie_update(data) {
+export function battle_update(data) {
     return {
-        type: SORTIE_UPDATE,
-        data: data
+        type: BATTLE_UPDATE,
+        data: data.api_data
     }
 }
 

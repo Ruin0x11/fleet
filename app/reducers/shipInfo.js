@@ -12,7 +12,7 @@ function getShipInfo(ship) {
 }
 
 function getShipNameList(data) {
-    var mstShipList = data.api_data.api_mst_ship;
+    var mstShipList = data.api_mst_ship;
     return mstShipList.reduce((acc, ship) => {
         var info = getShipInfo(ship);
         acc[info.id] = info;
