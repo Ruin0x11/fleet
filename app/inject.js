@@ -1,14 +1,15 @@
 __fleetTools={
-    getSWF: function(){
+    getLoginForm: function() {
         var body = document.querySelector('body');
-        var gameArea = document.getElementById('area_game');
+        var loginForm = document.getElementById('main-my');
         body.innerHTML = '';
-        body.appendChild(gameArea);
+        body.appendChild(loginForm);
     }
 }
 
 const {ipcRenderer} = require('electron');
-ipcRenderer.on('ping', () => {
-    // obtain the source URL of the game's iframe and tell the host to render it
+
+ipcRenderer.on('getGameFrame', () => {
+    // obtain the source URL of the game's iframe and tell the host to set the webview's URL to it
     ipcRenderer.sendToHost("src", document.getElementById("game_frame").getAttribute("src"));
 });
