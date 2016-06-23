@@ -184,6 +184,7 @@ function httpUserRequest( userRequest, userResponse ) {
                     userResponse.end();
 
                     console.log(path);
+                    console.log(hostport)
                     // check if the path being requested matches a 艦これ API call
                     var args = router.match(path);
                     if(args) {

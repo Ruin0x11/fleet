@@ -6,7 +6,8 @@ const getApiBasicData = (state) => state.portData.api_basic
 const getApiNdockData = (state) => state.portData.api_ndock
 const getShipInfo = (state) => state.shipInfo
 
-const getShip = (ship, shipInfo) => {
+const getShip = (ship, shipInfo, ndockData) => {
+    var ndockIds = ndockData.map(dock => dock.api_ship_id);
     return {
         id: ship.api_id,
         ship_id: ship.api_ship_id,
@@ -21,18 +22,21 @@ const getShip = (ship, shipInfo) => {
         ammo: ship.api_bull,
         maxAmmo: shipInfo[ship.api_ship_id].maxAmmo,
         slots: ship.api_onslot,
-        cond: ship.api_cond
+        cond: ship.api_cond,
+        dockTime: ship.api_ndock_time,
+        isDocked: ndockIds.includes(ship.api_id)
     }
 }
 
 const getShipList = createSelector(
     getApiShipList,
     getShipInfo,
-    (apiShipList, shipInfo) => {
+    getApiNdockData,
+    (apiShipList, shipInfo, apiNdockData) => {
         var lookup = {};
         var array = apiShipList;
         for (var i = 0, len = array.length; i < len; i++) {
-            lookup[array[i].api_id] = getShip(array[i], shipInfo);
+            lookup[array[i].api_id] = getShip(array[i], shipInfo, apiNdockData);
         }
         return lookup;
     }
@@ -46,6 +50,7 @@ const getDock = (dock, shipList) => {
     return {
         id: dock.api_id,
         shipName: shipName,
+        shipId: dock.api_ship_id,
         state: dock.api_state,
         // timestamp is in milliseconds already
         completionDate: new Date(dock.api_complete_time)

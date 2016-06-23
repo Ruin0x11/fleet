@@ -1,0 +1,11 @@
+.parent {
+  height: 100%;
+  display: flex;
+  flex-flow: column;
+}
+
+.container {
+  margin: 0px auto;
+  width: 800px;
+  height: 480px;
+}

@@ -49,6 +49,9 @@ function reportBattle(data) {
 
     var enemiesLeft = 0;
 
+    console.log(shipDamage)
+    console.log(data.api_nowhps)
+
     for(var i in friendlyDamage) {
         console.log(friendlyHps[i] + " " + friendlyDamage[i] + " " + friendlyMaxHps[i])
         if(friendlyHps[i] - friendlyDamage[i] <= Math.ceil(friendlyMaxHps[i] * 0.25)) {
@@ -61,7 +64,10 @@ function reportBattle(data) {
 
     for(var i in enemyDamage) {
         console.log(enemyHps[i] + " " + enemyDamage[i])
-        if(enemyHps[i] - enemyDamage[i] > 0) {
+        if(enemyHps[i] == -1) {
+            continue;
+        }
+        else if(enemyHps[i] - enemyDamage[i] > 0) {
             enemiesLeft += 1;
         }
     }

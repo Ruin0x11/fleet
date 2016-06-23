@@ -1,8 +1,26 @@
 import React, { PropTypes, Component } from 'react';
 import { Link } from 'react-router';
 import styles from './Ship.css';
-import { shipPropTypes } from './DeckList';
 import HealthBar from './HealthBar';
+
+export const shipPropTypes = {
+    id: PropTypes.number.isRequired,
+    ship_id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+    level: PropTypes.number.isRequired,
+    nowExp: PropTypes.number.isRequired,
+    nextExp: PropTypes.number.isRequired,
+    nowHp: PropTypes.number.isRequired,
+    maxHp: PropTypes.number.isRequired,
+    fuel: PropTypes.number.isRequired,
+    maxFuel: PropTypes.number.isRequired,
+    ammo: PropTypes.number.isRequired,
+    maxAmmo: PropTypes.number.isRequired,
+    slots: PropTypes.array.isRequired,
+    cond: PropTypes.number.isRequired,
+    dockTime: PropTypes.number.isRequired,
+    isDocked: PropTypes.bool.isRequired
+}
 
 export default class Ship extends Component {
     static propTypes = {
@@ -36,36 +54,43 @@ export default class Ship extends Component {
     }
 
     render() {
-        return <tr>
-          <td><span className={styles.name}>
-            {this.props.name}
-          </span></td>
+        console.log(this.props.dockTime);
+        return (
+            <tr className={this.props.isDocked ? styles.important : ''}>
+              <td><span className={styles.name}>
+                {this.props.name}
+              </span></td>
 
-          <td><span className={styles.desc}>
-            Lv.
-          </span>
-          {this.props.level}
-          </td>
+              <td><span className={styles.desc}>
+                Lv.
+              </span>
+              {this.props.level}
+              </td>
 
-          <td style={{ width: '5em', paddingRight: '.5em'}}>
-            <span className={styles.desc}>
-              TNL
-            </span>
-              {this.props.nextExp}
-          </td>
-          <td>
-            <HealthBar percent={(this.props.nowHp/this.props.maxHp) * 100} />
-            <small>{this.props.nowHp} / {this.props.maxHp}</small>
-          </td>
-          <td>
-            <span className={styles.desc}>
-              CND
-            </span>
-            {this.props.cond}
-            <div style= {{ background: this.getConditionColor(this.props.cond)}}
-                 className={styles.condition}>
-            </div>
-          </td>
-        </tr>;
+              <td style={{ width: '5em', paddingRight: '.5em'}}>
+                <span className={styles.desc}>
+                  TNL
+                </span>
+                {this.props.nextExp}
+              </td>
+              <td>
+                <HealthBar percent={(this.props.nowHp/this.props.maxHp) * 100} />
+                <small>{this.props.nowHp} / {this.props.maxHp}</small>
+              </td>
+              <td>
+                <span className={styles.desc}>
+                  CND
+                </span>
+                {this.props.cond}
+                <div style= {{ background: this.getConditionColor(this.props.cond)}}
+                     className={styles.condition}>
+                </div>
+              </td>
+              <td>
+                {this.props.fuel}<span className={styles.desc}> / {this.props.maxFuel}</span>
+                {this.props.ammo}<span className={styles.desc}> / {this.props.maxAmmo}</span>
+              </td>
+            </tr>
+        );
     }
 }

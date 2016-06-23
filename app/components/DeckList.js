@@ -4,23 +4,7 @@ import Deck from './Deck'
 import Tabs, { Pane } from './Tabs'
 import styles from './DeckList.css'
 import Timer from './Timer'
-
-export const shipPropTypes = {
-    id: PropTypes.number.isRequired,
-    ship_id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-    level: PropTypes.number.isRequired,
-    nowExp: PropTypes.number.isRequired,
-    nextExp: PropTypes.number.isRequired,
-    nowHp: PropTypes.number.isRequired,
-    maxHp: PropTypes.number.isRequired,
-    fuel: PropTypes.number.isRequired,
-    maxFuel: PropTypes.number.isRequired,
-    ammo: PropTypes.number.isRequired,
-    maxAmmo: PropTypes.number.isRequired,
-    slots: PropTypes.array.isRequired,
-    cond: PropTypes.number.isRequired,
-}
+import { shipPropTypes } from './Ship'
 
 export const deckPropTypes = {
     id: PropTypes.number.isRequired,

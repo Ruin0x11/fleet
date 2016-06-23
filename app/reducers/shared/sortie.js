@@ -21,8 +21,8 @@ function getKoukuDamage(data) {
     if(!kouku.api_stage3) {
         return getInitializedArray(0);
     }
-    var fdam = kouku.api_stage3.api_fdam;
-    var edam = kouku.api_stage3.api_edam;
+    var fdam = kouku.api_stage3.api_fdam.slice();
+    var edam = kouku.api_stage3.api_edam.slice();
     // remove leading -1s
     fdam.shift();
     edam.shift();
@@ -35,8 +35,8 @@ function getOpeningDamage(data) {
     if(!opening_atack) {
         return getInitializedArray(0);
     }
-    var fdam = opening_atack.api_fdam;
-    var edam = opening_atack.api_edam;
+    var fdam = opening_atack.api_fdam.slice();
+    var edam = opening_atack.api_edam.slice();
     // remove leading -1s
     fdam.shift();
     edam.shift();
@@ -81,8 +81,8 @@ function getRaigekiDamage(data) {
     if(!raigeki) {
         return getInitializedArray(0);
     }
-    var fdam = raigeki.api_fdam;
-    var edam = raigeki.api_edam;
+    var fdam = raigeki.api_fdam.slice();
+    var edam = raigeki.api_edam.slice();
     // remove leading -1
     fdam.shift();
     edam.shift();

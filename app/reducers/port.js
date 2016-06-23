@@ -50,7 +50,6 @@ function updateFromBattle(state, data) {
 }
 
 function updateFromResult(state, data) {
-    console.log("updateFromResult")
     state = updateGainedExperience(state, data);
     state = updateCondition(state, data, getConditionFromResult);
     return state;
@@ -71,8 +70,6 @@ function updateCondition(state, apiData, conditionFunc) {
         else if(ship.api_cond < 0) {
             ship.api_cond = 0;
         }
-        console.log(fleet[i])
-        console.log(ship.api_cond)
     }
 
     return Object.assign({}, state, {
@@ -128,7 +125,6 @@ function getConditionFromResult(data) {
     // arrays are 1-indexed
     conditionArray[data.api_mvp-1] += 10
 
-    console.log(conditionArray)
     return conditionArray;
 }
 
@@ -157,16 +153,12 @@ function updateGainedExperience(state, data) {
     var fleet = state.api_deck_port[0].api_ship;
     const shipExpTables = data.api_get_exp_lvup;
 
-    console.log(data)
     gainedShipExp.shift();
-
-    console.log(gainedShipExp);
 
     var shipList = state.api_ship.slice();
 
     for(var i = 0, len = fleet.length; i < len; i++) {
         var ship = getShip(shipList, fleet[i])
-        console.log(ship)
         if(typeof(ship) == 'undefined') {
             continue;
         }
@@ -186,10 +178,6 @@ function updateGainedExperience(state, data) {
             expToNext = expTable[j] - expTable[j-1];
         }
         expToNext -= expLeft;
-
-        console.log(expTable)
-        console.log(gainedExp)
-        console.log(expToNext)
 
         ship.api_exp[0] += gainedExp; // total exp
         ship.api_exp[1] = expToNext;  // exp to next level

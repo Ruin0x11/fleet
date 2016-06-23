@@ -34,6 +34,10 @@
     </style>
   </head>
   <body>
+    <div id="overlay" class="loader-wrapper">
+      <div class="loader"></div>
+    </div>
+
     <div id="fleet"></div>
 
     <script>
@@ -61,15 +65,16 @@
              webview.loadURL(e.args[0]);
          });
 
-         /* const indicator = document.querySelector('.indicator');
-          */
+         const overlay = document.getElementById("overlay");
+
          const loadstart = () => {
-             /* indicator.innerText = 'loading...';*/
+             overlay.style.display = 'block';
          };
+
          var did = false;
 
          const loadstop = () => {
-             /* indicator.innerText = '';*/
+             overlay.style.display = 'none';
              webview.insertCSS("#sectionWrap{ visibility:hidden; }")
              webview.insertCSS("#spacing_top{ display:none; }")
              webview.insertCSS("#flashWrap{ overflow:hidden; margin:0; }")
