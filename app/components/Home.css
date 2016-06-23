@@ -1,8 +1,15 @@
+.parent {
+  height: 100%;
+  display: flex;
+  flex-flow: column;
+}
+
 .container {
   /* position: absolute; */
-  top: 30%;
-  left: 10px;
-  text-align: center;
+  margin: 0px auto;
+  width: 800px;
+  height: 480px;
+  flex: 0 1 480px;
   background-color: black;
 }
 

@@ -45,7 +45,7 @@ describe('reducers', () => {
             const { state, sortieHeavilyDamaged } = setup();
             var result = messageReducer(state, { type: BATTLE_UPDATE,
                                                  data: sortieHeavilyDamaged })
-            expect(result.message).to.eql("One or more ships heavily damaged. Return immediately!")
+            expect(result.message).to.eql("One or more ships heavily damaged - Return immediately!")
         });
 
         it('notifies when a ship is obtained', () => {

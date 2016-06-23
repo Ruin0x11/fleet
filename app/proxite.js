@@ -2,46 +2,40 @@ var http = require('http');
 var net = require('net');
 var ProxyAgent = require('proxy-agent');
 var zlib = require('zlib');
-
-var debugging = 0;
-
-var regex_hostport = /^([^:]+)(:([0-9]+))?$/;
-
 var ruta3 = require('ruta3');
-var IPCStream = require('electron-ipc-stream')
-
 var fs = require('fs');
 
+var debugging = 0;
 var server = null;
 var port = 5555;
 var router = ruta3();
-var ipcs = new IPCStream('file');
 
-const {ipcRenderer} = require('electron');
+const { ipcRenderer } = require('electron');
 
 function decompress(response) {
-    var data;
+    var gunzipped;
     try {
-        var data = zlib.gunzipSync(response).toString();
+        gunzipped = zlib.gunzipSync(response).toString();
     } catch (e) {
         // data wasn't gzipped, try as plaintext
         return getSvdata(response.toString());
     }
-    return getSvdata(data);
+    return getSvdata(gunzipped);
 }
 
 function getSvdata(data) {
-    // return the JSON after "svdata="
-    console.log(data)
-    var jsonString = data.substring(data.indexOf("svdata=")+7, data.length);
-    return JSON.parse(jsonString);
+    var svdata;
+    // get the JSON object from a string like "svdata={...}"
+    eval(data)
+    return svdata;
 }
 
 function writeResponse(url, response) {
     var filename = "./".concat(url.replace(/\//g, '_').concat(".json"));
 
     var wstream = fs.createWriteStream(filename);
-    wstream.write(response);
+    var json = JSON.stringify(response)
+    wstream.write(json);
     wstream.end();
     console.log("Saved ".concat(filename));
 }
@@ -87,10 +81,12 @@ router.addRoute('/kcsapi/api_port/port', dispatchPort);
 router.addRoute('/kcsapi/api_req_sortie/battle', dispatchBattle);
 router.addRoute('/kcsapi/api_req_practice/battle', dispatchBattle);
 router.addRoute('/kcsapi/api_req_sortie/battleresult', dispatchBattleResult);
-router.addRoute('/kcsapi/api_req_practice/battleresult', dispatchBattleResult);
+router.addRoute('/kcsapi/api_req_practice/battle_result', dispatchBattleResult);
 router.addRoute('/kcsapi/api_req_map/start', dispatchSortieStart);
 router.addRoute('/kcsapi/api_req_map/next', dispatchSortieNext);
 router.addRoute('/kcsapi/api_get_member/ndock', dispatchDock);
+
+var regex_hostport = /^([^:]+)(:([0-9]+))?$/;
 
 function getHostPortFromString( hostString, defaultPort ) {
     var host = hostString;
@@ -129,6 +125,7 @@ function httpUserRequest( userRequest, userResponse ) {
 
     var agent;
 
+    // don't make the proxy look for bundle.js
     if(hostport[0] == "localhost") {
         agent = userRequest.agent;
     } else {
@@ -186,12 +183,15 @@ function httpUserRequest( userRequest, userResponse ) {
                     }
                     userResponse.end();
 
-                    console.log(path)
-
+                    console.log(path);
+                    // check if the path being requested matches a 艦これ API call
                     var args = router.match(path);
                     if(args) {
-                        console.log("hit")
-                        args.action(buf)
+                        console.log("hit");
+                        args.action(buf);
+                    } else if(path.includes("kcsapi")) {
+                        var res = decompress(buf);
+                        writeResponse(path, res);
                     }
                 }
             );
@@ -230,8 +230,6 @@ function httpUserRequest( userRequest, userResponse ) {
 };
 
 function startServer() {
-    port = 5555; // default port if none on command line
-
     if ( debugging ) {
         console.log( 'server listening on port ' + port );
     }

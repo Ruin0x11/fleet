@@ -1,9 +1,9 @@
 .container {
-  position: absolute;
-  width: inherit;
-  height: inherit;
   text-align: center;
-  /* background-color: grey; */
+  display: flex;
+  flex-flow: column;
+  flex: 1 1 auto;
+  height: 100%
 }
 
 .container h2 {
@@ -15,18 +15,15 @@
 }
 
 .tab {
+  display: flex;
   position: relative;
-  /* height: 25%; */
   border-top:1px solid #444;
   background: #EF233C;
-  height: 3.38em;
-  line-height: 3.38em;
-  text-align: center;
+  flex: 1 1 auto;
+  align-items: center;
 }
 
 .tab span {
   font-size:.9em;
-  display: inline-block;
-  vertical-align: middle;
-  line-height: normal;
+  flex: 1 1 auto;
 }

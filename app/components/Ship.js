@@ -15,14 +15,23 @@ export default class Ship extends Component {
 
     getConditionColor(condition) {
         var g, b;
-        if(condition > 50) {
-            g = 255;
-            b = 255 - Math.floor(255 * ((50 - condition % 50) / 50));
+        if (condition < 20) {
+            g = 0;
+            b = 0;
         }
-        else {
-            g = Math.floor(255 * (condition / 50));
+        else if (condition < 30) {
+            g = 165;
             b = 0
         }
+        else if (condition > 49) {
+            g = 255;
+            b = 0;
+        }
+        else {
+            g = 255;
+            b = 255;
+        }
+
         return "rgb(255," + g + "," + b + ")"
     }
 

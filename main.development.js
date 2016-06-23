@@ -1,6 +1,5 @@
 import { app, ipcMain, BrowserWindow, Menu, shell } from 'electron';
 const main = require('electron-process').main;
-var IPCStream = require('electron-ipc-stream')
 
 let menu;
 let template;
@@ -29,12 +28,6 @@ app.on('ready', () => {
         height: 800,
         'web-preferences': {'plugins': true}
     });
-
-    var ipcs = new IPCStream('file',mainWindow);
-    ipcs.on('data', function (data) {
-        console.dir(data) // => {name: 'JP'}
-        console.dir("====================")
-    })
 
     backgroundWindow = new BrowserWindow();
     backgroundWindow.hide();

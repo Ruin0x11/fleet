@@ -49,7 +49,7 @@ export default class Timer extends Component {
     }
 
     componentDidMount() {
-        this.setInterval();
+        this.handleProps(this.props)
     }
 
     componentWillUnmount() {
@@ -57,10 +57,16 @@ export default class Timer extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        const remaining = nextProps.completionDate - Date.now()
+        this.handleProps(nextProps);
+    }
+
+    handleProps(props) {
+        const remaining = props.completionDate - Date.now();
         if (remaining > 0) {
-            this.setState({ finished: false })
+            this.setState({ finished: false });
             this.setInterval();
+        } else {
+            this.setState({ message: props.completionMessage });
         }
     }
 
@@ -78,6 +84,8 @@ export default class Timer extends Component {
             const timeRemaining = this.props.completionDate - Date.now();
             if(timeRemaining <= 0 && !this.state.finished) {
                 this.setState({ finished: true })
+
+                // notify the user if a notification was specified
                 if(typeof(this.props.notification) != 'undefined') {
                     let notification = new Notification(
                         this.props.notification.title, {

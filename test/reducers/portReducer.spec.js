@@ -1,6 +1,7 @@
 import { expect } from 'chai';
 import portReducer from '../../app/reducers/port';
 import { PORT_UPDATE } from '../../app/actions/port';
+import { SORTIE_START_UPDATE } from '../../app/actions/sortieStart';
 import { BATTLE_UPDATE } from '../../app/actions/sortie';
 import { BATTLE_RESULT_UPDATE } from '../../app/actions/battleResult';
 
@@ -8,10 +9,12 @@ function setup() {
     const portData = require('../mocks/portDataMock.json');
     const sortieData = require('../mocks/sortieEnemyRemains.json')
     const battleResultData = require('../mocks/battleResultDataMock.json')
+    const state = portReducer({}, { type: PORT_UPDATE, data: portData });
     return {
         portData,
         sortieData,
-        battleResultData
+        battleResultData,
+        state
     };
 }
 
@@ -22,9 +25,8 @@ describe('reducers', () => {
         });
 
         it('should handle PORT_UPDATE', () => {
-            const { portData } = setup();
-            var result = portReducer({}, { type: PORT_UPDATE, data: portData });
-            var ships = result.api_ship;
+            const { state } = setup();
+            var ships = state.api_ship;
             expect(ships[0].api_id).to.equal(1);
             expect(ships[0].api_nowhp).to.equal(30);
             expect(ships[0].api_maxhp).to.equal(30);
@@ -32,9 +34,16 @@ describe('reducers', () => {
             expect(ships[0].api_cond).to.equal(80);
         });
 
+        it('should handle SORTIE_START_UPDATE', () => {
+            const { state } = setup();
+            var ships = state.api_ship;
+            expect(ships[0].api_cond).to.equal(80);
+            var result = portReducer(state, { type: SORTIE_START_UPDATE, data: {} })
+            expect(ships[0].api_cond).to.equal(65);
+        });
+
         it('should handle BATTLE_UPDATE', () => {
-            const { portData, sortieData } = setup();
-            var state = portReducer({}, { type: PORT_UPDATE, data: portData });
+            const { state, sortieData } = setup();
             var ships = state.api_ship
             expect(ships[0].api_nowhp).to.equal(30);
             expect(ships[0].api_cond).to.equal(80);
@@ -46,8 +55,7 @@ describe('reducers', () => {
         });
 
         it('should handle BATTLE_RESULT_UPDATE', () => {
-            const { portData, battleResultData } = setup();
-            var state = portReducer({}, { type: PORT_UPDATE, data: portData });
+            const { state, battleResultData } = setup();
             var ships = state.api_ship
             var playerExp = state.api_basic.api_experience
             expect(ships[0].api_exp[0]).to.equal(30000); // total
@@ -60,7 +68,7 @@ describe('reducers', () => {
             playerExp = state.api_basic.api_experience
             // gained 540 experience, level up was at 1500
             expect(ships[0].api_exp[0]).to.equal(30540);
-            expect(ships[0].api_exp[1]).to.equal(240);
+            expect(ships[0].api_exp[1]).to.equal(360);
             // gained 100 player experience
             expect(playerExp).to.equal(50100);
             // gained 17 condition (S rank, flagship was MVP)

@@ -1,12 +1,7 @@
 .container {
   position: relative;
-  top: 3em;
-  height: 13.5em;
   display: flex;
-  padding-top: 4px;
-  /* left: 10px; */
-  /* text-align: center; */
-  /* background-color: grey; */
+  flex: 1 1 auto;
 }
 
 .leftarea {

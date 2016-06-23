@@ -1,8 +1,8 @@
 .container {
   /* position: absolute; */
-  top: 30%;
-  height: 19em;
-  left: 10px;
+  display: flex;
+  flex: 1 1 auto;
+  flex-flow: column;
   /* text-align: center; */
   /* background-color: grey; */
 }

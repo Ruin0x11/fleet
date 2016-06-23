@@ -5,6 +5,7 @@
     <title>Fleet</title>
     <script>window.$ = window.jQuery = require('./scripts/jquery-3.0.0.js');</script>
     <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="./style.css">
 
     <script>
      (function() {
@@ -34,7 +35,6 @@
   </head>
   <body>
     <div id="fleet"></div>
-    <!-- <webview id="game" style="width:800; height:480px" preload="./inject.js" src="http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/" plugins></webview> -->
 
     <script>
      (function() {
@@ -59,7 +59,6 @@
          webview.addEventListener("ipc-message", function (e) {
              console.log(e);
              webview.loadURL(e.args[0]);
-             webview.openDevTools();
          });
 
          /* const indicator = document.querySelector('.indicator');

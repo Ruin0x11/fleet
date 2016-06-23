@@ -12,15 +12,15 @@ const initialState = {}
 export default function portReducer(state = initialState, action) {
     switch (action.type) {
         case PORT_UPDATE:
-            return action.data;
+            return action.data.api_data;
         case DOCK_UPDATE:
-            return updateDock(state, action.data)
+            return updateDock(state, action.data.api_data)
         case SORTIE_START_UPDATE:
             return updateFromSortieStart(state)
         case BATTLE_UPDATE:
-            return updateFromBattle(state, action.data)
+            return updateFromBattle(state, action.data.api_data)
         case BATTLE_RESULT_UPDATE:
-            return updateFromResult(state, action.data)
+            return updateFromResult(state, action.data.api_data)
         default:
             return state;
     }
@@ -50,12 +50,14 @@ function updateFromBattle(state, data) {
 }
 
 function updateFromResult(state, data) {
+    console.log("updateFromResult")
     state = updateGainedExperience(state, data);
     state = updateCondition(state, data, getConditionFromResult);
     return state;
 }
 
 function updateCondition(state, apiData, conditionFunc) {
+    // TODO: detect which deck is out
     var fleet = state.api_deck_port[0].api_ship;
     var shipList = state.api_ship.slice();
     var conditionChange = conditionFunc(apiData);
@@ -69,6 +71,8 @@ function updateCondition(state, apiData, conditionFunc) {
         else if(ship.api_cond < 0) {
             ship.api_cond = 0;
         }
+        console.log(fleet[i])
+        console.log(ship.api_cond)
     }
 
     return Object.assign({}, state, {
@@ -124,10 +128,12 @@ function getConditionFromResult(data) {
     // arrays are 1-indexed
     conditionArray[data.api_mvp-1] += 10
 
+    console.log(conditionArray)
     return conditionArray;
 }
 
 function updateFleetDamage(state, data) {
+    // TODO: detect which deck is out
     var fleet = state.api_deck_port[0].api_ship;
     var shipList = state.api_ship.slice();
     var damage = getShipDamage(data);
@@ -148,16 +154,19 @@ function updateFleetDamage(state, data) {
 
 function updateGainedExperience(state, data) {
     var gainedShipExp = data.api_get_ship_exp;
-    var shipIds = data.api_ship_id;
+    var fleet = state.api_deck_port[0].api_ship;
     const shipExpTables = data.api_get_exp_lvup;
 
+    console.log(data)
     gainedShipExp.shift();
-    shipIds.shift();
+
+    console.log(gainedShipExp);
 
     var shipList = state.api_ship.slice();
 
-    for(var i = 0, len = shipIds.length; i < len; i++) {
-        var ship = getShip(shipList, shipIds[i])
+    for(var i = 0, len = fleet.length; i < len; i++) {
+        var ship = getShip(shipList, fleet[i])
+        console.log(ship)
         if(typeof(ship) == 'undefined') {
             continue;
         }
@@ -170,11 +179,17 @@ function updateGainedExperience(state, data) {
         // so, remove the amount that was reached from the 'exp to next' value
         // until no more entries are in the table.
         var lastMax = 0;
-        var expToNext = expTable[0] + gainedExp;
-        for(var j = 1, lenb = expTable.length; j < expTable.length; j++) {
-            expToNext -= lastMax;
-            lastMax = expTable[j];
+        var expToNext = expTable[1] - expTable[0];
+        var expLeft = gainedExp;
+        for(var j = 2, lenb = expTable.length; j < expTable.length; j++) {
+            expLeft -= expToNext
+            expToNext = expTable[j] - expTable[j-1];
         }
+        expToNext -= expLeft;
+
+        console.log(expTable)
+        console.log(gainedExp)
+        console.log(expToNext)
 
         ship.api_exp[0] += gainedExp; // total exp
         ship.api_exp[1] = expToNext;  // exp to next level

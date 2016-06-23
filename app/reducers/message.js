@@ -14,11 +14,11 @@ export default function messageReducer(state = initialState, action) {
             return { isActive: false };
         case SORTIE_START_UPDATE:
         case SORTIE_NEXT_UPDATE:
-            return reportSortieMovement(action.data);
+            return reportSortieMovement(action.data.api_data);
         case BATTLE_UPDATE:
-            return reportBattle(action.data);
+            return reportBattle(action.data.api_data);
         case BATTLE_RESULT_UPDATE:
-            return reportBattleResult(action.data);
+            return reportBattleResult(action.data.api_data);
         default:
             return state;
     }
@@ -30,7 +30,7 @@ function reportSortieMovement(data) {
     var rashinId = data.api_rashin_id;
     var next = data.api_next;
     var no = data.api_no;
-    message = "flag: " + rashinFlg + " id: " + rashinId + " next: " + next + " no: " no
+    message = "flag: " + rashinFlg + " id: " + rashinId + " next: " + next + " no: " + no
     return {
         message: message
     }
@@ -50,6 +50,7 @@ function reportBattle(data) {
     var enemiesLeft = 0;
 
     for(var i in friendlyDamage) {
+        console.log(friendlyHps[i] + " " + friendlyDamage[i] + " " + friendlyMaxHps[i])
         if(friendlyHps[i] - friendlyDamage[i] <= Math.ceil(friendlyMaxHps[i] * 0.25)) {
             return {
                 message: "One or more ships heavily damaged - Return immediately!",
@@ -59,6 +60,7 @@ function reportBattle(data) {
     }
 
     for(var i in enemyDamage) {
+        console.log(enemyHps[i] + " " + enemyDamage[i])
         if(enemyHps[i] - enemyDamage[i] > 0) {
             enemiesLeft += 1;
         }

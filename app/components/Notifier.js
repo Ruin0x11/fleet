@@ -54,7 +54,6 @@ export default class Notifier extends Component {
     }
 
     toggleNotification() {
-        console.log("die")
         this.setState({
             isActive: !this.state.isActive
         })

@@ -13,6 +13,7 @@ import { port_update } from './actions/port';
 import { battle_update } from './actions/sortie';
 import { sortie_start_update } from './actions/sortieStart';
 import { battle_result_update } from './actions/battleResult';
+import { dock_update } from './actions/dock';
 
 const store = configureStore();
 const history = syncHistoryWithStore(hashHistory, store);
