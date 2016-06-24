@@ -88,7 +88,8 @@ const getDeckDateWhenReady = (ships) => {
     }, 100);
 
     // condition recovery is 3 per 3 minutes, with 49 highest for natural recovery
-    var minutesRemaining = Math.ceil((49 - lowestCond)/3)*3;
+    var resortieThreshold = 30;
+    var minutesRemaining = Math.ceil((resortieThreshold - lowestCond)/3)*3;
     var dateNow = new Date();
     var dateWhenReady = new Date(dateNow);
     dateWhenReady.setMinutes(dateNow.getMinutes() + minutesRemaining)

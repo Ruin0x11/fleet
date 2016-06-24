@@ -47,16 +47,22 @@ function getSingleHougekiDamage(hougeki) {
     if(!hougeki) {
         return getInitializedArray(0);
     }
-    var df_list = hougeki.api_df_list;
-    var damage = hougeki.api_damage;
+    var df_list = hougeki.api_df_list.slice();
+    var damage = hougeki.api_damage.slice();
     var shipDamage = getInitializedArray(0);
 
+    // remove leading -1s
+    df_list.shift();
+    damage.shift();
+
+    console.log(df_list);
     for (var i = 0, len = df_list.length; i < len; i++) {
-        // TODO: find case with multiple damages in single attack
-        var target = df_list[i][0];
-        var targetDamage = damage[i][0]
-        // the arrays are 1-indexed, so subtract 1
-        shipDamage[target-1] += targetDamage;
+        for (var j = 0, lenb = df_list[i].length; j < lenb; j++) {
+            var target = df_list[i][j];
+            var targetDamage = damage[i][j];
+            // the arrays are 1-indexed, so subtract 1
+            shipDamage[target-1] += targetDamage;
+        }
     }
 
     return shipDamage

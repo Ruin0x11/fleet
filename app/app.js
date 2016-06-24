@@ -1,3 +1,5 @@
+var fs = require("fs");
+var path = require("path");
 var ipc = require("ipc");
 require('electron-cookies');
 
@@ -27,11 +29,31 @@ function hideLoadingOverlay() {
     overlay.style.display = 'none';
 }
 
+function onLoadStart() {
+    showLoadingOverlay();
+
+    if (!frameLoaded && webview.getURL().includes(gameURL)) {
+        loadGameFrame();
+    } else if (webview.getURL().includes(loginURL)) {
+        loadLoginForm();
+    } else if (frameLoaded) {
+        hideLoadingOverlay();
+    } else {
+        webview.loadURL(gameURL);
+    }
+}
+
 function injectCSS() {
     webview.insertCSS("#sectionWrap{ visibility:hidden; }");
     webview.insertCSS("#spacing_top{ display:none; }");
     webview.insertCSS("#flashWrap{ background: #000000; overflow:hidden; margin:0; }");
     webview.insertCSS("body{ overflow:hidden; margin:0; }");
+
+    var filename = path.join(__dirname, 'loginForm.css')
+    fs.readFile(filename, 'utf8', function(err, data) {
+        if (err) throw err;
+        webview.insertCSS(data);
+    });
 }
 
 function transformPage() {
@@ -43,12 +65,13 @@ function transformPage() {
         loadLoginForm();
     } else if (frameLoaded) {
         hideLoadingOverlay();
+    } else {
+        webview.loadURL(gameURL);
     }
 };
 
 function loadLoginForm() {
     webview.executeJavaScript('__fleetTools.getLoginForm()');
-    webview.openDevTools();
     hideLoadingOverlay();
 }
 

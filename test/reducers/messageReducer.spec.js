@@ -31,14 +31,14 @@ describe('reducers', () => {
             const { state, sortieAllEnemiesDestroyed } = setup();
             var result = messageReducer(state, { type: BATTLE_UPDATE,
                                                  data: sortieAllEnemiesDestroyed })
-            expect(result.message).to.eql("All enemies defeated. Moving to next stage.")
+            expect(result.message).to.eql("All enemies defeated.")
         });
 
         it('notifies when enemies remain after a battle', () => {
             const { state, sortieEnemyRemains } = setup();
             var result = messageReducer(state, { type: BATTLE_UPDATE,
                                                  data: sortieEnemyRemains })
-            expect(result.message).to.eql("6 enemies still remain. Waiting for night battle/retreat.")
+            expect(result.message).to.eql("6 enemies still remain.")
         });
 
         it('notifies when a ship is heavily damaged', () => {

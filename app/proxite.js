@@ -4,13 +4,14 @@ var ProxyAgent = require('proxy-agent');
 var zlib = require('zlib');
 var ruta3 = require('ruta3');
 var fs = require('fs');
+const { ipcRenderer } = require('electron');
 
 var debugging = 0;
 var server = null;
 var port = 5555;
 var router = ruta3();
 
-const { ipcRenderer } = require('electron');
+var regex_hostport = /^([^:]+)(:([0-9]+))?$/;
 
 function decompress(response) {
     var gunzipped;
@@ -86,8 +87,6 @@ router.addRoute('/kcsapi/api_req_map/start', dispatchSortieStart);
 router.addRoute('/kcsapi/api_req_map/next', dispatchSortieNext);
 router.addRoute('/kcsapi/api_get_member/ndock', dispatchDock);
 
-var regex_hostport = /^([^:]+)(:([0-9]+))?$/;
-
 function getHostPortFromString( hostString, defaultPort ) {
     var host = hostString;
     var port = defaultPort;
@@ -108,6 +107,8 @@ function httpUserRequest( userRequest, userResponse ) {
     if ( debugging ) {
         console.log( '  > request: %s', userRequest.url );
     }
+
+    console.log(userRequest)
 
     var httpVersion = userRequest['httpVersion'];
     var hostport = getHostPortFromString( userRequest.headers['host'], 80 );
@@ -162,6 +163,8 @@ function httpUserRequest( userRequest, userResponse ) {
                 proxyResponse.headers
             );
 
+            console.log(proxyResponse.headers);
+
             var buf = Buffer.alloc(0);
 
             proxyResponse.on(
@@ -183,21 +186,22 @@ function httpUserRequest( userRequest, userResponse ) {
                     }
                     userResponse.end();
 
+                    if(path.includes("kcsapi")) {
+                        var res = decompress(buf);
+                        writeResponse(path, res);
+                    }
+
                     console.log(path);
-                    console.log(hostport)
+
                     // check if the path being requested matches a 艦これ API call
                     var args = router.match(path);
                     if(args) {
                         console.log("hit");
                         args.action(buf);
-                    } else if(path.includes("kcsapi")) {
-                        var res = decompress(buf);
-                        writeResponse(path, res);
                     }
                 }
             );
-        }
-    );
+        });
 
     proxyRequest.on(
         'error',
@@ -244,6 +248,8 @@ function startServer() {
         function ( request, socketRequest, bodyhead ) {
             var url = request['url'];
             var httpVersion = request['httpVersion'];
+
+            console.log(url);
 
             var hostport = getHostPortFromString( url, 443 );
 

@@ -1,5 +1,6 @@
 import { app, ipcMain, BrowserWindow, Menu, shell } from 'electron';
 const main = require('electron-process').main;
+var fs = require("fs");
 
 let menu;
 let template;
@@ -267,4 +268,25 @@ function continueSetup() {
 
 ipcMain.on('dispatch', (_, arg) => {
     mainWindow.webContents.send('dispatch', arg);
+});
+
+ipcMain.on('screenshot', (_, arg) => {
+    console.log("SHOT")
+    const cb = data => {
+        var timestamp = new Date().getUTCMilliseconds();
+        fs.writeFile(timestamp + ".png", data.toPng(), function(err) {
+            if (err) {
+                console.log("Failed to save screenshot", err);
+            }
+        });
+    };
+
+    var crop = {
+        x: 0,
+        y: 0,
+        width: 800,
+        height: 480
+    };
+
+    mainWindow.capturePage(crop, cb);
 });

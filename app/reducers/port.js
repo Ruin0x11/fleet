@@ -176,6 +176,7 @@ function updateGainedExperience(state, data) {
         for(var j = 2, lenb = expTable.length; j < expTable.length; j++) {
             expLeft -= expToNext
             expToNext = expTable[j] - expTable[j-1];
+            ship.api_lv += 1;
         }
         expToNext -= expLeft;
 

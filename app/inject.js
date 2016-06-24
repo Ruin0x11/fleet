@@ -1,9 +1,13 @@
 __fleetTools={
     getLoginForm: function() {
-        var body = document.querySelector('body');
-        var loginForm = document.getElementById('main-my');
-        body.innerHTML = '';
-        body.appendChild(loginForm);
+        var scripts = document.getElementsByTagName('script');
+
+        var i;
+        for (i = 0; i < document.styleSheets.length; i++) {
+            if (!document.styleSheets[i].disabled) {
+                document.styleSheets[i].disabled = true;
+            }
+        }
     }
 }
 

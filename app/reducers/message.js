@@ -73,9 +73,10 @@ function reportBattle(data) {
     }
 
     if(enemiesLeft == 0) {
-        message = "All enemies defeated. Moving to next stage."
+        message = "All enemies defeated.";
     } else {
-        message = enemiesLeft + " enemies still remain. Waiting for night battle/retreat."
+        message = enemiesLeft + " enemies still remain.";
+        color = "#Ee7600";
     }
 
     return {

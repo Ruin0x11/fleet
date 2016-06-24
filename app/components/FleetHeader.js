@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { Link } from 'react-router';
 import styles from './FleetHeader.css';
+import ScreenshotButton from './ScreenshotButton';
 
 export const playerDataPropTypes = {
     nickname: PropTypes.string.isRequired,
@@ -39,7 +40,7 @@ export default class FleetHeader extends Component {
                   </td>
                   <td className={styles.id}>
                     <span className={styles.miscinfo}>
-                      Buckets: 0
+                      <ScreenshotButton/>
                     </span>
                   </td>
                 </tr>
