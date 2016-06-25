@@ -12,6 +12,7 @@ import { ship_info_update } from './actions/shipInfo';
 import { port_update } from './actions/port';
 import { battle_update } from './actions/sortie';
 import { sortie_start_update } from './actions/sortieStart';
+import { sortie_next_update } from './actions/sortieNext';
 import { battle_result_update } from './actions/battleResult';
 import { dock_update } from './actions/dock';
 

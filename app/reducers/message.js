@@ -52,16 +52,6 @@ function reportBattle(data) {
     console.log(shipDamage)
     console.log(data.api_nowhps)
 
-    for(var i in friendlyDamage) {
-        console.log(friendlyHps[i] + " " + friendlyDamage[i] + " " + friendlyMaxHps[i])
-        if(friendlyHps[i] - friendlyDamage[i] <= Math.ceil(friendlyMaxHps[i] * 0.25)) {
-            return {
-                message: "One or more ships heavily damaged - Return immediately!",
-                color: "#CC1B00"
-            }
-        }
-    }
-
     for(var i in enemyDamage) {
         console.log(enemyHps[i] + " " + enemyDamage[i])
         if(enemyHps[i] == -1) {
@@ -77,6 +67,16 @@ function reportBattle(data) {
     } else {
         message = enemiesLeft + " enemies still remain.";
         color = "#Ee7600";
+    }
+
+    for(var i in friendlyDamage) {
+        console.log(friendlyHps[i] + " " + friendlyDamage[i] + " " + friendlyMaxHps[i])
+        if(friendlyHps[i] - friendlyDamage[i] <= Math.ceil(friendlyMaxHps[i] * 0.25)) {
+            return {
+                message: message + " One or more ships heavily damaged - Return immediately!",
+                color: "#CC1B00"
+            }
+        }
     }
 
     return {
