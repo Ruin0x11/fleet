@@ -47,7 +47,7 @@ ipcRenderer.on('dispatch', (_, arg) => {
         case 'sortieStart':
             store.dispatch(sortie_start_update(arg.data));
             break;
-        case 'sortieStart':
+        case 'sortieNext':
             store.dispatch(sortie_next_update(arg.data));
             break;
         case 'dock':

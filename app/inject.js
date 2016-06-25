@@ -1,9 +1,6 @@
 __fleetTools={
-    getLoginForm: function() {
-        var scripts = document.getElementsByTagName('script');
-
-        var i;
-        for (i = 0; i < document.styleSheets.length; i++) {
+    disableStylesheets: function() {
+        for (var i = 0; i < document.styleSheets.length; i++) {
             if (!document.styleSheets[i].disabled) {
                 document.styleSheets[i].disabled = true;
             }

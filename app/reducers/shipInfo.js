@@ -6,8 +6,10 @@ function getShipInfo(ship) {
     return {
         id: ship.api_id,
         name: ship.api_name,
+        rarity: ship.api_backs,
         maxFuel: ship.api_fuel_max,
-        maxAmmo: ship.api_bull_max
+        maxAmmo: ship.api_bull_max,
+        upgradeLevel: ship.api_afterlv ? ship.api_afterlv : -1
     }
 }
 

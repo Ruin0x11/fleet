@@ -9,6 +9,10 @@ var frameLoaded = false;
 const loginURL = "www.dmm.com/my/-/login/"
 const gameURL = "www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/"
 
+if (process.env.FLEET != 'run') {
+    hideLoadingOverlay();
+}
+
 webview.addEventListener('console-message', function(event) {
     console.log('Webview message: ', event.message);
 });
@@ -27,20 +31,6 @@ function showLoadingOverlay() {
 function hideLoadingOverlay() {
     const overlay = document.getElementById("overlay");
     overlay.style.display = 'none';
-}
-
-function onLoadStart() {
-    showLoadingOverlay();
-
-    if (!frameLoaded && webview.getURL().includes(gameURL)) {
-        loadGameFrame();
-    } else if (webview.getURL().includes(loginURL)) {
-        loadLoginForm();
-    } else if (frameLoaded) {
-        hideLoadingOverlay();
-    } else {
-        webview.loadURL(gameURL);
-    }
 }
 
 function injectCSS() {
@@ -71,12 +61,11 @@ function transformPage() {
 };
 
 function loadLoginForm() {
-    webview.executeJavaScript('__fleetTools.getLoginForm()');
+    webview.executeJavaScript('__fleetTools.disableStylesheets()');
     hideLoadingOverlay();
 }
 
 function loadGameFrame() {
-
     frameLoaded = true;
     webview.send('getGameFrame');
 }

@@ -3,8 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>Fleet</title>
-    <script>window.$ = window.jQuery = require('./scripts/jquery-3.0.0.js');</script>
-    <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="../node_modules/font-awesome/css/font-awesome.min.css" />
     <link rel="stylesheet" href="./style.css">
 
     <script>
@@ -43,7 +42,7 @@
     <script>
      (function() {
          const script = document.createElement('script');
-         script.src = (process.env.HOT) ? 'http://localhost:3000/dist/bundle.js' : '../dist/bundle.js';
+         script.src = (process.env.HOT) ? 'http://localhost:4000/dist/bundle.js' : '../dist/bundle.js';
          document.write(script.outerHTML);
      }());
     </script>

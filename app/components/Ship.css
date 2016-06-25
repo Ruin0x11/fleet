@@ -6,6 +6,10 @@
   background: #8A0F00;
 }
 
+.upgradeable {
+  background: #008A0F;
+}
+
 .desc {
   font-size: 10px;
   color: #DDE2E4;

@@ -1,6 +1,7 @@
 import { app, ipcMain, BrowserWindow, Menu, shell } from 'electron';
 const main = require('electron-process').main;
 var fs = require("fs");
+const path = require('path');
 
 let menu;
 let template;
@@ -9,7 +10,18 @@ let backgroundWindow = null;
 
 app.commandLine.appendSwitch('proxy-server', 'localhost:5555');
 
-app.commandLine.appendSwitch('ppapi-flash-path', '/Applications/Google Chrome.app/Contents/Versions/51.0.2704.84/Google Chrome Framework.framework/Internet Plug-Ins/PepperFlash/PepperFlashPlayer.plugin');
+let ppapi_flash_path;
+
+// Determine which flash plugin to use
+if(process.platform  == 'win32'){
+    ppapi_flash_path = path.join(__dirname, 'plugins', 'pepflashplayer.dll');
+} else if (process.platform == 'linux') {
+    ppapi_flash_path = path.join(__dirname, 'plugins', 'libpepflashplayer.so');
+} else if (process.platform == 'darwin') {
+    ppapi_flash_path = path.join(__dirname, 'plugins', 'PepperFlashPlayer.plugin');
+}
+
+app.commandLine.appendSwitch('ppapi-flash-path', ppapi_flash_path);
 app.commandLine.appendSwitch('ppapi-flash-version', '21.0.0.242');
 
 if (process.env.NODE_ENV === 'development') {
@@ -271,7 +283,6 @@ ipcMain.on('dispatch', (_, arg) => {
 });
 
 ipcMain.on('screenshot', (_, arg) => {
-    console.log("SHOT")
     const cb = data => {
         var timestamp = new Date().getUTCMilliseconds();
         fs.writeFile(timestamp + ".png", data.toPng(), function(err) {

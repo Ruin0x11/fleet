@@ -53,13 +53,24 @@ export default class Ship extends Component {
         return "rgb(255," + g + "," + b + ")"
     }
 
+    getBackgroundClass() {
+        if (this.props.isDocked) {
+            return styles.important;
+        } else if (this.props.canUpgrade) {
+            return styles.upgradeable;
+        }
+        return '';
+    }
+
     render() {
         console.log(this.props.dockTime);
         return (
-            <tr className={this.props.isDocked ? styles.important : ''}>
-              <td><span className={styles.name}>
+            <tr className={this.getBackgroundClass()}>
+              <td style={{ width: '4.5em', paddingRight: '.5em'}}>
+                <span className={styles.name}>
                 {this.props.name}
-              </span></td>
+                </span>
+              </td>
 
               <td><span className={styles.desc}>
                 Lv.
@@ -75,7 +86,7 @@ export default class Ship extends Component {
               </td>
               <td>
                 <HealthBar percent={(this.props.nowHp/this.props.maxHp) * 100} />
-                <small>{this.props.nowHp} / {this.props.maxHp}</small>
+                <small>{this.props.nowHp.toFixed(0)} / {this.props.maxHp}</small>
               </td>
               <td>
                 <span className={styles.desc}>

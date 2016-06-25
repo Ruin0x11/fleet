@@ -108,8 +108,6 @@ function httpUserRequest( userRequest, userResponse ) {
         console.log( '  > request: %s', userRequest.url );
     }
 
-    console.log(userRequest)
-
     var httpVersion = userRequest['httpVersion'];
     var hostport = getHostPortFromString( userRequest.headers['host'], 80 );
 
@@ -147,6 +145,8 @@ function httpUserRequest( userRequest, userResponse ) {
         console.log( '  > options: %s', JSON.stringify( options, null, 2 ) );
     }
 
+    var userData = Buffer.alloc(0);
+
     var proxyRequest = http.request(
         options,
         function ( proxyResponse ) {
@@ -162,8 +162,6 @@ function httpUserRequest( userRequest, userResponse ) {
                 proxyResponse.statusCode,
                 proxyResponse.headers
             );
-
-            console.log(proxyResponse.headers);
 
             var buf = Buffer.alloc(0);
 
@@ -192,6 +190,7 @@ function httpUserRequest( userRequest, userResponse ) {
                     }
 
                     console.log(path);
+                    console.log(userData.toString())
 
                     // check if the path being requested matches a 艦これ API call
                     var args = router.match(path);
@@ -222,6 +221,7 @@ function httpUserRequest( userRequest, userResponse ) {
             if ( debugging ) {
                 console.log( '  > chunk = %d bytes', chunk.length );
             }
+            userData = Buffer.concat([userData, chunk]);
             proxyRequest.write( chunk );
         }
     );

@@ -17,7 +17,7 @@ export default class App extends Component {
                                          preload="./inject.js"
                                          src="http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/"
                                          ref={node => node && node.setAttribute('plugins', '')}>
-                
+
                          </webview>;
                      }
                  })()

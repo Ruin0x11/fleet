@@ -86,12 +86,13 @@ function reportBattle(data) {
     }
 }
 function reportBattleResult(data) {
-    var color;
+    var color, shipId;
     var winRank = data.api_win_rank;
     var getShip = data.api_get_ship;
     var message = "Rank: " + winRank + ".";
 
     if(getShip) {
+        shipId = getShip.api_ship_id
         message = message + " Obtained ship: " + getShip.api_ship_name + " (" + getShip.api_ship_type + ")"
         color = "#EEB422"
     }
@@ -99,6 +100,7 @@ function reportBattleResult(data) {
     return {
         message: message,
         isActive: true,
-        color: color
+        color: color,
+        shipId: shipId
     }
 }

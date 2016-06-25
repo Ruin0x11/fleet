@@ -5,16 +5,7 @@ import Tabs, { Pane } from './Tabs'
 import styles from './DeckList.css'
 import Timer from './Timer'
 import { shipPropTypes } from './Ship'
-
-export const deckPropTypes = {
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-    ships: PropTypes.arrayOf(PropTypes.shape({
-        ...shipPropTypes
-    })).isRequired,
-    missions: PropTypes.array.isRequired,
-    dateWhenReady: PropTypes.instanceOf(Date)
-}
+import { deckPropTypes } from './Deck'
 
 export default class DeckList extends Component {
     static propTypes = {
@@ -42,7 +33,7 @@ export default class DeckList extends Component {
                              label={<div>
                            <div>{deck.name}</div>
                            <div style={{ fontSize: "11px" }}>
-                             <Timer completionDate={deck.dateWhenReady}
+                             <Timer completionDate={deck.condRecoveryDate}
                                     completionMessage={"Ready"}
                                     notification={{ title: "Ready to Sortie",
                                                     body: deck.name + " can sortie again."}}/>

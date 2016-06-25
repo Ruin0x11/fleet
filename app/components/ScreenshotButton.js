@@ -17,7 +17,7 @@ export default class ScreenshotButton extends Component {
     render() {
         return (
             <div onClick={this.handleClick}>
-              Screenshot
+              <i className="fa fa-camera" aria-hidden="true"></i>
             </div>
         );
     }

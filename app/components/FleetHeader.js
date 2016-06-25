@@ -39,9 +39,9 @@ export default class FleetHeader extends Component {
                     </span>
                   </td>
                   <td className={styles.id}>
-                    <span className={styles.miscinfo}>
+                    <div>
                       <ScreenshotButton/>
-                    </span>
+                    </div>
                   </td>
                 </tr>
 
@@ -58,9 +58,9 @@ export default class FleetHeader extends Component {
                     </span>
                   </td>
                   <td className={styles.id}>
-                    <span className={styles.miscinfo}>
-                      <Link to="/settings">Settings</Link>
-                    </span>
+                    <Link to="/settings">
+                      <i className="fa fa-cog" aria-hidden="true"></i>
+                    </Link>
                   </td>
                 </tr>
               </tbody>

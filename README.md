@@ -8,7 +8,6 @@ A KanColle client written with Electron, React and Redux.
 
 * Built-in proxy forwarding
 * Global display of fleet status/condition
-* Preemptive battle results
+* Preemptive battle/ship obtainment results
 * Notifications if ships are damaged
-* Desktop notifications upon ship repair/all ships in deck reach condition 49
-* Display time until ship repair
+* Display remaining time for and notifications upon ship repair/all ships in deck reach condition 49

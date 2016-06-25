@@ -7,12 +7,12 @@ const dockPropTypes = {
     id: PropTypes.number.isRequired,
     shipName: PropTypes.string.isRequired,
     state: PropTypes.number.isRequired,
-    completionDate: PropTypes.instanceOf(Date)
+    finishDate: PropTypes.instanceOf(Date)
 }
 
 const missionPropTypes = {
     id: PropTypes.number.isRequired,
-    completionDate: PropTypes.instanceOf(Date),
+    finishDate: PropTypes.instanceOf(Date),
     deckName: PropTypes.string.isRequired
 }
 
@@ -47,7 +47,7 @@ export default class DockInfo extends Component {
               <span className={styles.dockship}>{dock.shipName}</span>
             <Timer key={index}
                    completionMessage={"Ready!"}
-                   completionDate={dock.completionDate}
+                   completionDate={dock.finishDate}
                    notification={{ title: "Repair finished",
                                    body: dock.shipName + " was repaired."}}/>
             </li>
