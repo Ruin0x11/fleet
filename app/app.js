@@ -1,7 +1,5 @@
 var fs = require("fs");
 var path = require("path");
-var ipc = require("ipc");
-require('electron-cookies');
 
 const webview = document.getElementById('game');
 var frameLoaded = false;

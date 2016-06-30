@@ -18,7 +18,7 @@ export const deckPropTypes = {
 
 export default class Deck extends Component {
     static propTypes = {
-        ..deckPropTypes
+        ...deckPropTypes
     }
 
     constructor(props) {
