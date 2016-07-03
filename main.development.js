@@ -22,7 +22,7 @@ if(process.platform  == 'win32'){
 }
 
 app.commandLine.appendSwitch('ppapi-flash-path', ppapi_flash_path);
-app.commandLine.appendSwitch('ppapi-flash-version', '21.0.0.242');
+// app.commandLine.appendSwitch('ppapi-flash-version', '21.0.0.242');
 
 if (process.env.NODE_ENV === 'development') {
     require('electron-debug')(); // eslint-disable-line global-require
@@ -124,7 +124,7 @@ function continueSetup() {
                 label: 'Go',
                 accelerator: 'Command+G',
                 click() {
-                    mainWindow.loadURL(`file://${__dirname}/app/app.html`);
+                    mainWindow.loadURL(`https://www.adobe.com/jp/software/flash/about/`);
                 }
             }, {
                 label: 'Copy',
