@@ -105,6 +105,8 @@
     "electron-json-storage": "^2.0.0",
     "electron-process": "^0.2.0",
     "font-awesome": "^4.6.3",
+    "lodash": "^4.13.1",
+    "lowdb": "^0.13.1",
     "postcss": "^5.0.21",
     "proxy-agent": "^2.0.0",
     "rc-progress": "^1.0.4",

@@ -33,6 +33,10 @@ app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit();
 });
 
+const low = require('lowdb');
+const db = low('settings.json');
+
+db.defaults({ proxy: "" }).value();
 
 app.on('ready', () => {
     mainWindow = new BrowserWindow({
@@ -54,8 +58,6 @@ app.on('ready', () => {
 });
 function continueSetup() {
     mainWindow.loadURL(`file://${__dirname}/app/app.html`);
-    // mainWindow.loadURL('http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/');
-    // mainWindow.loadURL('http://www.adobe.com/software/flash/about/');
 
     mainWindow.webContents.on('did-finish-load', () => {
         mainWindow.show();
@@ -64,6 +66,8 @@ function continueSetup() {
 
     mainWindow.on('closed', () => {
         mainWindow = null;
+        backgroundWindow.close();
+        backgroundWindow = null;
     });
 
     if (process.env.NODE_ENV === 'development') {

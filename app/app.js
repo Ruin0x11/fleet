@@ -68,5 +68,7 @@ function loadGameFrame() {
     webview.send('getGameFrame');
 }
 
-webview.addEventListener('did-start-loading', showLoadingOverlay);
+if (process.env.NODE_ENV == 'production') {
+    webview.addEventListener('did-start-loading', showLoadingOverlay);
+}
 webview.addEventListener('did-stop-loading', transformPage);

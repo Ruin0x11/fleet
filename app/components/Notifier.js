@@ -62,7 +62,7 @@ export default class Notifier extends Component {
     render() {
         const { isActive } = this.state;
         return (
-                <Notification
+            <Notification
             isActive={this.state.isActive}
             activeBarStyle={this.activeStyle()}
             barStyle={this.style()}
@@ -70,7 +70,7 @@ export default class Notifier extends Component {
             dismissAfter={200}
             onDismiss={this.toggleNotification.bind(this)}
             onClick={() => this.setState({ isActive: false })}
-                />
+            />
         );
     }
 }
