@@ -28,7 +28,6 @@ if (process.env.NODE_ENV === 'development') {
     require('electron-debug')(); // eslint-disable-line global-require
 }
 
-
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit();
 });
@@ -36,18 +35,21 @@ app.on('window-all-closed', () => {
 const low = require('lowdb');
 const db = low('settings.json');
 
-db.defaults({ proxy: "" }).value();
+db.defaults({ settings: { proxy: "", proxyProtocol: "http", proxyPort: 80 } }).value();
 
 app.on('ready', () => {
     mainWindow = new BrowserWindow({
         show: false,
         width: 800,
-        height: 800,
-        'web-preferences': {'plugins': true}
+        height: 768,
+        'web-preferences': { 'plugins': true }
     });
 
     backgroundWindow = new BrowserWindow();
-    backgroundWindow.hide();
+
+    if (process.env.NODE_ENV === 'production') {
+        backgroundWindow.hide();
+    }
 
     // load the proxy server
     backgroundWindow.loadURL(`file://${__dirname}/app/proxite.html`);
@@ -56,6 +58,7 @@ app.on('ready', () => {
     // otherwise bundle.js fails to load. so, set a timeout
     setTimeout(continueSetup, 2000)
 });
+
 function continueSetup() {
     mainWindow.loadURL(`file://${__dirname}/app/app.html`);
 
@@ -211,8 +214,9 @@ function continueSetup() {
             }]
         }];
 
-        menu = Menu.buildFromTemplate(template);
-        Menu.setApplicationMenu(menu);
+        /* /* menu = Menu.buildFromTemplate(template);
+         *  Menu.setApplicationMenu(menu);*/
+         Menu.setApplicationMenu(null);
     } else {
         template = [{
             label: '&File',
@@ -277,8 +281,9 @@ function continueSetup() {
                 }
             }]
         }];
-        menu = Menu.buildFromTemplate(template);
-        mainWindow.setMenu(menu);
+        /* menu = Menu.buildFromTemplate(template);
+         * mainWindow.setMenu(menu);*/
+         mainWindow.setMenu(null);
     }
 }
 

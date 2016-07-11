@@ -1,123 +1,127 @@
+#welcome {
+    display: none !important;
+}
+
 .box-snsid {
-  display: none;
+    display: none;
 }
 
 span.txt-or {
-  display: none;
+    display: none;
 }
 
 ul.box-subtxt {
-  display: none;
+    display: none;
 }
 
 .box-account {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translateX(-50%) translateY(-50%);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
 }
 
 body {
-  width: 800px;
-  min-width: 800px;
-  height: 480px;
-  min-height: 480px;
-  background: #232C39;
+    width: 800px;
+    min-width: 800px;
+    height: 480px;
+    min-height: 480px;
+    background: #232C39;
 }
 
 label {
-  display: none;
+    display: none;
 }
 
 dt {
-  display: none;
+    display: none;
 }
 
 div#footer-my {
-  display: none;
+    display: none;
 }
 
 div#d-header {
-  display: none;
+    display: none;
 }
 
 .area-footer {
-  display: none;
+    display: none;
 }
 
 p.capt {
-  display: none;
+    display: none;
 }
 
 .box-snsid {
-  display: none;
+    display: none;
 }
 
 .area-regist {
-  display: none;
+    display: none;
 }
 
 div#page-popup {
-  display: none;
+    display: none;
 }
 
 div#popup-cover {
-  display: none;
+    display: none;
 }
 
 div#popup-main {
-  display: none;
+    display: none;
 }
 
 input#login_id {
-  width: 250px;
-  height: 18px;
-  margin-bottom: 10px;
+    width: 250px;
+    height: 18px;
+    margin-bottom: 10px;
 }
 
 input#password {
-  width: 250px;
-  height: 18px;
+    width: 250px;
+    height: 18px;
 }
 
 .box-btn-login {
-  text-align: center;
+    text-align: center;
 }
 
 .btn {
-  -webkit-border-radius: 4;
-  -moz-border-radius: 4;
-  border-radius: 4px;
-  font-family: Arial;
-  color: #ffffff;
-  font-size: 16px;
-  background: #6D798E;
-  padding: 8px 16px 8px 16px;
-  text-decoration: none;
-  text-align: center;
+    -webkit-border-radius: 4;
+    -moz-border-radius: 4;
+    border-radius: 4px;
+    font-family: Arial;
+    color: #ffffff;
+    font-size: 16px;
+    background: #6D798E;
+    padding: 8px 16px 8px 16px;
+    text-decoration: none;
+    text-align: center;
 }
 
 .btn:hover {
-  background: #8D99AE;
-  text-decoration: none;
+    background: #8D99AE;
+    text-decoration: none;
 }
 
 .btn > * {
-  display: inline-block;
-  background-color: transparent;
-  background-repeat: no-repeat;
-  box-sizing: border-box;
-  color: #333;
-  font-size: inherit;
-  font-family: inherit;
-  cursor: inherit;
+    display: inline-block;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    box-sizing: border-box;
+    color: #333;
+    font-size: inherit;
+    font-family: inherit;
+    cursor: inherit;
 
-  color: #ffffff;
-  -webkit-appearance: none;
-  appearance: none;
-  border: none;
-  border-radius: 0;
-  vertical-align: middle;
-  text-align: center;
+    color: #ffffff;
+    -webkit-appearance: none;
+    appearance: none;
+    border: none;
+    border-radius: 0;
+    vertical-align: middle;
+    text-align: center;
 }
 

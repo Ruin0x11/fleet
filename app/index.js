@@ -32,6 +32,7 @@ store.dispatch(battle_result_update(parsedJSON));
 
 ipcRenderer.on('dispatch', (_, arg) => {
     console.log(arg.type)
+    console.log(arg)
     switch(arg.type) {
         case 'shipInfo':
             store.dispatch(ship_info_update(arg.data));

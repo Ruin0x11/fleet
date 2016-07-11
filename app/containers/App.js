@@ -11,7 +11,7 @@ export default class App extends Component {
             <div className={styles.parent}>
               <div className={styles.container}>
                 {(() => {
-                     if (process.env.NODE_ENV == 'production' || process.env.FLEET == 'ui') {
+                     if (process.env.NODE_ENV == 'production' || process.env.FLEET !== 'ui') {
                          return <webview id="game"
                                          style={{width: 800, height: 480}}
                                          preload="./inject.js"

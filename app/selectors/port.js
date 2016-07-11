@@ -99,6 +99,7 @@ const getDeckCondRecoveryDate = (ships) => {
 }
 
 const getDeck = (deck, shipList) => {
+    console.log(deck)
     var mission = null;
     if (deck.api_mission[0] == 1) {
         mission = {

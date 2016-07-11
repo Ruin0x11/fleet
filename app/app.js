@@ -3,14 +3,24 @@ var path = require("path");
 
 const webview = document.getElementById('game');
 var frameLoaded = false;
+var reachedLogin = false;
+var loadError = false;
 
 const loginURL = "www.dmm.com/my/-/login/"
 const gameURL = "www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/"
+const blockedURLs = ["www.dmm.com/en/top/-/error/area/",
+    "www.dmm.com/en/netgame/foreign/",
+    "www.dmm.com/en/top/-/error/area/",
+    "www.dmm.com/ja/top/-/error/area/"]
 
 if (process.env.FLEET != 'run') {
     hideLoadingOverlay();
 }
 
+/* webview.addEventListener('dom-ready', () => {
+ *     webview.openDevTools();
+ * });
+ * */
 webview.addEventListener('console-message', function(event) {
     console.log('Webview message: ', event.message);
 });
@@ -31,6 +41,27 @@ function hideLoadingOverlay() {
     overlay.style.display = 'none';
 }
 
+function showLoadError() {
+    loadError = true;
+    webview.loadURL(`file://${__dirname}/error.html`);
+    hideLoadingOverlay();
+}
+
+function showBlockedError() {
+    loadError = true;
+    webview.loadURL(`file://${__dirname}/blocked.html`);
+    hideLoadingOverlay();
+}
+
+function isBlockedURL(url) {
+    for(var i = 0; i < blockedURLs.length; i++) {
+        if (url.includes(blockedURLs[i])) {
+            return true;
+        }
+    }
+    return false;
+}
+
 function injectCSS() {
     webview.insertCSS("#sectionWrap{ visibility:hidden; }");
     webview.insertCSS("#spacing_top{ display:none; }");
@@ -45,14 +76,28 @@ function injectCSS() {
 }
 
 function transformPage() {
-    injectCSS();
+    if (loadError) {
+        hideLoadingOverlay();
+        return;
+    }
 
-    if (!frameLoaded && webview.getURL().includes(gameURL)) {
+    injectCSS();
+    console.log("loaded")
+    console.log(webview.getURL())
+    console.log(reachedLogin)
+
+    var url = webview.getURL();
+
+    if (!frameLoaded && url.includes(gameURL)) {
         loadGameFrame();
-    } else if (webview.getURL().includes(loginURL)) {
-        loadLoginForm();
     } else if (frameLoaded) {
         hideLoadingOverlay();
+    } else if (url.includes(loginURL)) {
+        loadLoginForm();
+    } else if (isBlockedURL(url)) {
+        showBlockedError();
+    } else if (!reachedLogin) {
+        showLoadError();
     } else {
         webview.loadURL(gameURL);
     }
@@ -61,14 +106,18 @@ function transformPage() {
 function loadLoginForm() {
     webview.executeJavaScript('__fleetTools.disableStylesheets()');
     hideLoadingOverlay();
+    reachedLogin = true;
 }
 
 function loadGameFrame() {
+    console.log("loading frame")
     frameLoaded = true;
     webview.send('getGameFrame');
 }
 
-if (process.env.NODE_ENV == 'production') {
-    webview.addEventListener('did-start-loading', showLoadingOverlay);
-}
+webview.addEventListener('did-start-loading', showLoadingOverlay);
 webview.addEventListener('did-stop-loading', transformPage);
+
+webview.addEventListener('did-fail-load', (a, b, c, d) => {
+    console.log(a);
+})

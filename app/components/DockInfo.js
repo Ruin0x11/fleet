@@ -41,6 +41,8 @@ export default class DockInfo extends Component {
               </span>
             </li>)
         }
+        console.log(dock.finishDate)
+        console.log(dock.finishDate - Date.now())
 
         return (
             <li key={index}>Dock {dock.id}:

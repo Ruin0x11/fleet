@@ -11,7 +11,30 @@ var server = null;
 var port = 5555;
 var router = ruta3();
 
+var low = require('lowdb');
+const db = low('settings.json');
+
+var proxyBase = db.get('settings.proxy').value();
+var proxyProtocol = db.get('settings.proxyProtocol').value();
+var proxyPort = db.get('settings.proxyPort').value();
+
+var proxy = proxyProtocol + "://" + proxyBase + ":" + proxyPort;
+
 var regex_hostport = /^([^:]+)(:([0-9]+))?$/;
+
+function parametersToHash(params) {
+    var query = decodeURIComponent(params);
+    var match;
+    var pl = /\+/g;  // Regex for replacing addition symbol with a space
+    var search = /([^&=]+)=?([^&]*)/g;
+    var decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); };
+
+    var urlParams = {};
+    while (match = search.exec(query)) {
+        urlParams[decode(match[1])] = decode(match[2]);
+    }
+    return urlParams;
+}
 
 function decompress(response) {
     var gunzipped;
@@ -25,10 +48,9 @@ function decompress(response) {
 }
 
 function getSvdata(data) {
-    var svdata;
     // get the JSON object from a string like "svdata={...}"
-    eval(data)
-    return svdata;
+    var svdata = data.substring(7);
+    return JSON.parse(svdata);
 }
 
 function writeResponse(url, response) {
@@ -45,7 +67,8 @@ function dispatch(type, response) {
     ipcRenderer.send('dispatch',
                      {
                          type: type,
-                         data: decompress(response)
+                         data: decompress(response.response),
+                         params: parametersToHash(response.params)
                      });
 }
 
@@ -125,11 +148,14 @@ function httpUserRequest( userRequest, userResponse ) {
     var agent;
 
     // don't make the proxy look for bundle.js
-    if(hostport[0] == "localhost") {
+    // don't proxy if none was provided
+    if(hostport[0] == "localhost" || proxy == "") {
         agent = userRequest.agent;
     } else {
-        agent = new ProxyAgent("http://210.254.22.13:8080")
+        agent = new ProxyAgent(proxy)
     }
+
+    console.log(hostport[0] + path);
 
     var options = {
         'host': hostport[0],
@@ -189,14 +215,13 @@ function httpUserRequest( userRequest, userResponse ) {
                         writeResponse(path, res);
                     }
 
-                    console.log(path);
-                    console.log(userData.toString())
-
                     // check if the path being requested matches a 艦これ API call
                     var args = router.match(path);
+
                     if(args) {
                         console.log("hit");
-                        args.action(buf);
+                        var response = { response: buf, params: userData.toString() }
+                        args.action(response);
                     }
                 }
             );
@@ -238,6 +263,8 @@ function startServer() {
     if ( debugging ) {
         console.log( 'server listening on port ' + port );
     }
+
+    console.log("using proxy " + proxy)
 
     // start HTTP server with custom request handler callback function
     server = http.createServer( httpUserRequest ).listen(port);

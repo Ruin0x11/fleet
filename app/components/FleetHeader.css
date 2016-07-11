@@ -1,7 +1,7 @@
 .header {
   width: 100%;
   text-align: left;
-  background-color: #8D99AE;
+  background-color: #2D394E;
   padding-left: 10px;
   /* display: inline-block; */
   /* box-sizing: border-box; */
@@ -23,7 +23,7 @@
   height: inherit;
   /* border:4px solid #000; */
   display:inline-block;
-  height: 24px;
+  height: 20px;
   bottom: 0;
   font-size: 16px;
 }
