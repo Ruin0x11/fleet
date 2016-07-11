@@ -6,6 +6,7 @@ import Timer from './Timer'
 const dockPropTypes = {
     id: PropTypes.number.isRequired,
     shipName: PropTypes.string.isRequired,
+    shipId: PropTypes.number.isRequired,
     state: PropTypes.number.isRequired,
     finishDate: PropTypes.instanceOf(Date)
 }

@@ -55,7 +55,7 @@ const getDock = (dock, shipList) => {
         shipId: dock.api_ship_id,
         state: dock.api_state,
         // timestamp is in milliseconds already
-        condRecoveryDate: new Date(dock.api_complete_time)
+        finishDate: new Date(dock.api_complete_time)
     }
 }
 
@@ -99,9 +99,8 @@ const getDeckCondRecoveryDate = (ships) => {
 }
 
 const getDeck = (deck, shipList) => {
-    console.log(deck)
     var mission = null;
-    if (deck.api_mission[0] == 1) {
+    if (deck.api_mission[1] > 0) {
         mission = {
             id: deck.api_mission[1],
             finishDate: new Date(deck.api_mission[2])
@@ -116,7 +115,7 @@ const getDeck = (deck, shipList) => {
         mission: mission,
         condRecoveryDate: getDeckCondRecoveryDate(ships)
     }
-    return a
+    return a;
 }
 
 export const getDeckList = createSelector(

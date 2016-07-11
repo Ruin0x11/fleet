@@ -37,6 +37,21 @@ const db = low('settings.json');
 
 db.defaults({ settings: { proxy: "", proxyProtocol: "http", proxyPort: 80 } }).value();
 
+function reloadProxy() {
+    if (backgroundWindow) {
+        backgroundWindow.close();
+    }
+
+    backgroundWindow = new BrowserWindow();
+
+    if (process.env.NODE_ENV === 'production') {
+        backgroundWindow.hide();
+    }
+
+    // load the proxy server
+    backgroundWindow.loadURL(`file://${__dirname}/app/proxite.html`);
+}
+
 app.on('ready', () => {
     mainWindow = new BrowserWindow({
         show: false,
@@ -291,9 +306,13 @@ ipcMain.on('dispatch', (_, arg) => {
     mainWindow.webContents.send('dispatch', arg);
 });
 
+ipcMain.on('reload-proxy', (_, arg) => {
+    reloadProxy();
+});
+
 ipcMain.on('screenshot', (_, arg) => {
     const cb = data => {
-        var timestamp = new Date().getUTCMilliseconds();
+        var timestamp = new Date().getTime().toString();
         fs.writeFile(timestamp + ".png", data.toPng(), function(err) {
             if (err) {
                 console.log("Failed to save screenshot", err);

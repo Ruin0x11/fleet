@@ -63,7 +63,7 @@ export default class Notifier extends Component {
         const { isActive } = this.state;
         return (
             <Notification
-            isActive={this.state.isActive}
+            isActive={true}
             activeBarStyle={this.activeStyle()}
             barStyle={this.style()}
             message={this.props.message}

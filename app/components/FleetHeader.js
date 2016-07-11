@@ -33,29 +33,29 @@ export default class FleetHeader extends Component {
                   <td className={styles.pic}>
                     <span className={styles.phrase}>{this.props.comment}</span>
                   </td>
-                  <td className={styles.title}>
+                  <td className={styles.id}>
                     Lv. <em>{this.props.level}</em>
                   </td>
                   <td className={styles.title}>
-                    <span className={styles.miscinfo}>To next:{this.props.experience}</span>
+                    <span className={styles.miscinfo}>EXP:{this.props.experience}</span>
                   </td>
-                  <td className={styles.desc}>
+                  <td className={styles.title}>
                     <span className={styles.miscinfo}>
                       Ships: {this.props.numChara} <small>/ {this.props.maxChara}</small>
                     </span>
                   </td>
-                  <td className={styles.desc}>
+                  <td className={styles.title}>
                     <span className={styles.miscinfo}>
                       Items: 0 <small>/ {this.props.maxEquip}</small>
                     </span>
                   </td>
                   <td className={styles.id}>
-                    <div>
-                      <ScreenshotButton/>
                       <Link to="/settings">
                         <i className="fa fa-cog" aria-hidden="true"></i>
                       </Link>
-                    </div>
+                  </td>
+                  <td className={styles.id}>
+                    <ScreenshotButton/>
                   </td>
                 </tr>
               </tbody>
