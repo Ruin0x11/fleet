@@ -49,7 +49,7 @@ export default class DeckList extends Component {
 
         for(var i = 0; i < deck.ships.length; i++) {
             var ship = deck.ships[i];
-            if(ship.nowHp <= Math.ceil(ship.maxHp * 0.25)) {
+            if(ship.nowHp <= Math.ceil(ship.maxHp * 0.25) && !ship.isDocked) {
                 status = "Heavily Damaged"
             }
         }

@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { Link } from 'react-router';
 import styles from './DockInfo.css';
 import Timer from './Timer'
+import { deckPropTypes } from './Deck'
 
 const dockPropTypes = {
     id: PropTypes.number.isRequired,
@@ -11,19 +12,13 @@ const dockPropTypes = {
     finishDate: PropTypes.instanceOf(Date)
 }
 
-const missionPropTypes = {
-    id: PropTypes.number.isRequired,
-    finishDate: PropTypes.instanceOf(Date),
-    deckName: PropTypes.string.isRequired
-}
-
 export default class DockInfo extends Component {
     static propTypes = {
         docks: PropTypes.arrayOf(PropTypes.shape({
             ...dockPropTypes
         })),
-        missions: PropTypes.arrayOf(PropTypes.shape({
-            ...missionPropTypes
+        decks: PropTypes.arrayOf(PropTypes.shape({
+            ...deckPropTypes
         }))
     }
 
@@ -48,29 +43,43 @@ export default class DockInfo extends Component {
         return (
             <li key={index}>Dock {dock.id}:
               <span className={styles.dockship}>{dock.shipName}</span>
-            <Timer key={index}
-                   completionMessage={"Ready!"}
-                   completionDate={dock.finishDate}
-                   notification={{ title: "Repair finished",
-                                   body: dock.shipName + " was repaired."}}/>
+              <Timer key={index}
+                     completionMessage={"Ready!"}
+                     completionDate={dock.finishDate}
+                     notification={{ title: "Repair finished",
+                                     body: dock.shipName + " was repaired."}}/>
             </li>
         )
     }
 
+    renderDeckMission(deck, index) {
+        if(deck.mission == null) {
+            return (<div key={index}>{deck.name}:
+              <span className={styles.disabled}>
+                (None)
+              </span>
+            </div>)
+        }
+        return (
+            <div key={index}>{deck.name}:
+              <Timer key={index}
+                     completionMessage={"Complete"}
+                     completionDate={deck.mission.finishDate}
+                     notification={{ title: "Mission complete",
+                                     body: deck.name + " finished a mission."}}/>
+            </div>
+        )
+    }
+
     render() {
+        console.log(this.props)
         return (
             <div className={styles.header}>
               <h3>Docks</h3>
-              <ul>
-                {this.props.docks.map((dock, i) => this.renderDock(dock, i))}
-              </ul>
-              <ul>
-                <h3>Missions</h3>
-                <li>1: 12:34:56</li>
-                <li>2: 12:34:56</li>
-                <li>3: 12:34:56</li>
-                <li>4: 12:34:56</li>
-              </ul>
+              {this.props.docks.map((dock, i) => this.renderDock(dock, i))}
+
+              <h3>Missions</h3>
+              {this.props.decks.map((deck, i) => this.renderDeckMission(deck, i))}
             </div>
         );
     }

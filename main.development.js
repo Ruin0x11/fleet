@@ -88,7 +88,8 @@ function continueSetup() {
         backgroundWindow = null;
     });
 
-    if (process.env.NODE_ENV === 'development') {
+    if (true) {
+        /* if (process.env.NODE_ENV === 'development') {*/
         mainWindow.openDevTools();
         backgroundWindow.openDevTools();
     }

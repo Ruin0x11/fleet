@@ -2,15 +2,15 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import DockInfo from '../components/DockInfo';
-import { getDockInfo } from '../selectors/port';
+import { getDockInfo, getDeckList } from '../selectors/port';
 
 function mapStateToProps (state) {
     if(!state.portData) {
-        return { docks: [], missions: [] };
+        return { docks: [], decks: [] };
     }
     return {
         docks: getDockInfo(state),
-        missions: []
+        decks: getDeckList(state)
     };
 }
 
